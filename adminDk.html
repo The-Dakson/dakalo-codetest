@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>DAKALO'S CODETEST --- Admin (DK)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#07080b;--s1:#0e1014;--s2:#141720;--s3:#1a1e28;
+--b1:#1e2330;--b2:#262d3d;--b3:#3a4257;
+--tx:#dde2ee;--tm:#8a94a8;--td:#505a72;--tdd:#2e3548;
+--ac:#4ade80;--acd:#166534;--acg:rgba(74,222,128,.12);
+--wa:#fbbf24;--wag:rgba(251,191,36,.11);
+--er:#f87171;--erg:rgba(248,113,113,.11);
+--bl:#60a5fa;--blg:rgba(96,165,250,.1);
+--cy:#22d3ee;--cyg:rgba(34,211,238,.1);
+--pu:#a78bfa;--pug:rgba(167,139,250,.1);
+--mono:'JetBrains Mono',monospace;
+--disp:'Syne',sans-serif;
+--r:7px;--rl:13px;--rxl:18px;
+}
+html,body{min-height:100vh;background:var(--bg);color:var(--tx);font-family:var(--disp)}
+body{background-image:radial-gradient(ellipse 900px 500px at 50% -100px,rgba(74,222,128,.06) 0%,transparent 70%),radial-gradient(ellipse 600px 400px at 90% 80%,rgba(96,165,250,.04) 0%,transparent 60%)}
+#topbar{position:sticky;top:0;z-index:100;background:rgba(7,8,11,.92);border-bottom:1px solid var(--b1);backdrop-filter:blur(16px)}
+#topbar .inner{max-width:1180px;margin:0 auto;padding:0 20px;height:58px;display:flex;align-items:center;gap:14px}
+.tb-logo{width:32px;height:32px;background:linear-gradient(135deg,var(--ac),#16a34a);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;box-shadow:0 0 16px rgba(74,222,128,.2)}
+.tb-site{font-family:var(--mono);font-size:9px;font-weight:700;color:var(--ac);letter-spacing:2px;line-height:1}
+.tb-title{font-size:14px;font-weight:800;letter-spacing:-.3px;line-height:1.2;margin-top:2px}
+.tb-sep{width:1px;height:24px;background:var(--b2)}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.login-card{width:100%;max-width:400px;background:var(--s1);border:1px solid var(--b1);border-radius:var(--rxl);padding:36px;text-align:center;position:relative;overflow:hidden}
+.login-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--ac),transparent);opacity:.7}
+.login-logo-big{width:64px;height:64px;background:linear-gradient(135deg,var(--ac),#16a34a);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 20px;box-shadow:0 8px 32px rgba(74,222,128,.25)}
+.login-site-name{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--ac);letter-spacing:2.5px;margin-bottom:8px}
+.login-heading{font-size:24px;font-weight:800;letter-spacing:-.5px;margin-bottom:6px}
+.login-sub{font-size:12px;color:var(--td);margin-bottom:28px}
+#main-app{display:none;max-width:1180px;margin:0 auto;padding:24px 20px}
+.tabs{display:flex;gap:3px;padding:4px;background:var(--s2);border:1px solid var(--b1);border-radius:11px;margin-bottom:22px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:1;padding:8px 10px;border-radius:8px;border:none;background:transparent;cursor:pointer;font-family:var(--disp);font-size:11px;font-weight:700;color:var(--td);transition:all .18s;text-align:center;white-space:nowrap}
+.tab.on{background:var(--s3);color:var(--tx);border:1px solid var(--b2)}
+.tab-content{display:none}.tab-content.on{display:block}
+.card{background:var(--s1);border:1px solid var(--b1);border-radius:var(--rl);overflow:hidden;margin-bottom:14px}
+.card:last-child{margin-bottom:0}
+.card-hd{padding:12px 16px;border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:8px}
+.card-ico{width:20px;height:20px;background:var(--s2);border:1px solid var(--b1);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.card-lbl{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--td)}
+.card-acts{margin-left:auto;display:flex;gap:6px}
+.card-body{padding:16px}
+.empty{text-align:center;padding:40px 24px;color:var(--td);font-size:13px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:700px){.g2,.g4{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.g2,.g4{grid-template-columns:1fr}}
+.stat{background:var(--s2);border:1px solid var(--b1);border-radius:var(--r);padding:12px 14px}
+.stat-l{font-family:var(--mono);font-size:9px;color:var(--td);letter-spacing:1.8px;text-transform:uppercase;margin-bottom:4px}
+.stat-v{font-family:var(--mono);font-size:24px;font-weight:700;letter-spacing:-1.5px}
+.green{color:var(--ac)}.amber{color:var(--wa)}.red{color:var(--er)}.blue{color:var(--bl)}.cyan{color:var(--cy)}.pu{color:var(--pu)}
+.row{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;align-items:center;padding:11px 16px;border-bottom:1px solid var(--b1);cursor:pointer;transition:background .13s}
+.row:last-child{border-bottom:none}.row:hover{background:var(--s2)}
+.row-name{font-size:13px;font-weight:600}
+.row-meta{font-family:var(--mono);font-size:10px;color:var(--td);margin-top:2px}
+.field{margin-bottom:12px}.field:last-child{margin-bottom:0}
+.lbl{display:block;font-family:var(--mono);font-size:9px;font-weight:600;color:var(--td);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:5px}
+.inp{width:100%;background:var(--s2);border:1px solid var(--b1);border-radius:var(--r);padding:9px 11px;font-family:var(--mono);font-size:12px;color:var(--tx);outline:none;transition:border-color .18s,box-shadow .18s;-webkit-appearance:none}
+.inp:focus{border-color:var(--ac);box-shadow:0 0 0 3px var(--acg)}
+.inp::placeholder{color:var(--tdd)}.inp:disabled{opacity:.4;cursor:not-allowed}
+textarea.inp{resize:vertical;line-height:1.7;font-size:12px}
+select.inp{cursor:pointer;color:var(--tx)}
+.btn{
+display:inline-flex;align-items:center;gap:6px;padding:8px 16px;
+border-radius:var(--r);font-family:var(--disp);font-size:11px;font-weight:700;
+cursor:pointer;border:none;
+transition:background .18s, transform .15s cubic-bezier(.34,1.56,.64,1),
+box-shadow .18s, opacity .18s;
+letter-spacing:.2px;white-space:nowrap;
+position:relative;overflow:hidden;
+-webkit-tap-highlight-color:transparent;
+}
+.btn::after{
+content:'';position:absolute;inset:0;border-radius:inherit;
+background:rgba(255,255,255,.14);opacity:0;
+transition:opacity .2s;pointer-events:none;
+}
+.btn:active:not(:disabled)::after{opacity:1}
+.btn:active:not(:disabled){transform:translateY(1px) scale(.98)!important}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none!important}
+.btn-p{background:var(--ac);color:#07080b;box-shadow:0 2px 10px rgba(74,222,128,.18)}
+.btn-p:not(:disabled):hover{background:#6ee7a0;transform:translateY(-2px);box-shadow:0 6px 18px rgba(74,222,128,.32)}
+.btn-s{background:var(--s2);color:var(--tx);border:1px solid var(--b1)}
+.btn-s:not(:disabled):hover{border-color:var(--b2);background:var(--b1);transform:translateY(-1px)}
+.btn-d{background:var(--er);color:#07080b;box-shadow:0 2px 10px rgba(248,113,113,.18)}
+.btn-d:not(:disabled):hover{background:#fca5a5;transform:translateY(-2px);box-shadow:0 5px 16px rgba(248,113,113,.3)}
+.btn-g{background:transparent;color:var(--tm);border:1px solid var(--b1)}
+.btn-g:not(:disabled):hover{color:var(--tx);border-color:var(--b2);background:rgba(255,255,255,.03)}
+.btn-cy{background:var(--cy);color:#07080b;box-shadow:0 2px 10px rgba(34,211,238,.18)}
+.btn-cy:not(:disabled):hover{background:#67e8f9;transform:translateY(-2px);box-shadow:0 5px 16px rgba(34,211,238,.3)}
+.btn-f{width:100%;justify-content:center}
+.btn-sm{padding:5px 10px;font-size:10px}
+.chip{font-family:var(--mono);font-size:10px;background:var(--s2);border:1px solid var(--b1);padding:3px 9px;border-radius:99px;color:var(--td);letter-spacing:.3px;white-space:nowrap}
+.chip-green{background:var(--acg);border-color:rgba(74,222,128,.25);color:var(--ac)}
+.chip-blue{background:var(--blg);border-color:rgba(96,165,250,.25);color:var(--bl)}
+.badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:99px;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.5px}
+.badge-green{background:var(--acg);color:var(--ac);border:1px solid rgba(74,222,128,.25)}
+.badge-amber{background:var(--wag);color:var(--wa);border:1px solid rgba(251,191,36,.25)}
+.badge-red{background:var(--erg);color:var(--er);border:1px solid rgba(248,113,113,.25)}
+.badge-gray{background:var(--s2);color:var(--td);border:1px solid var(--b1)}
+.badge-pu{background:var(--pug);color:var(--pu);border:1px solid rgba(167,139,250,.25)}
+.note{border-radius:var(--r);padding:10px 12px;font-size:11px;display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.note-ok{background:var(--acg);border:1px solid rgba(74,222,128,.25);color:var(--ac)}
+.note-warn{background:var(--wag);border:1px solid rgba(251,191,36,.25);color:var(--wa)}
+.note-err{background:var(--erg);border:1px solid rgba(248,113,113,.25);color:var(--er)}
+.note-info{background:var(--blg);border:1px solid rgba(96,165,250,.25);color:var(--bl)}
+#reply-modal-bg{position:fixed;inset:0;background:rgba(3,4,6,.92);display:none;align-items:center;justify-content:center;z-index:1000;padding:16px;backdrop-filter:blur(8px)}
+#reply-modal-bg.show{display:flex}
+.reply-modal{background:var(--s1);border:1.5px solid rgba(167,139,250,.4);border-radius:var(--rxl);width:100%;max-width:580px;max-height:90vh;overflow-y:auto;padding:26px;position:relative;box-shadow:0 8px 40px rgba(167,139,250,.15)}
+.reply-modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--pu),transparent);opacity:.8;border-radius:var(--rxl) var(--rxl) 0 0;pointer-events:none}
+.admin-reply-box{margin-top:10px;background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.25);border-radius:var(--r);padding:10px 13px}
+.admin-reply-box::before{content:'YOUR REPLY';display:block;font-family:var(--mono);font-size:8px;font-weight:700;color:var(--pu);letter-spacing:1.2px;margin-bottom:5px}
+.admin-reply-text{font-size:12px;color:var(--tm);line-height:1.7}
+.admin-reply-time{font-family:var(--mono);font-size:9px;color:var(--tdd);margin-top:4px}
+.btn-pu{background:var(--pu);color:#07080b;box-shadow:0 2px 10px rgba(167,139,250,.18)}
+.btn-pu:not(:disabled):hover{background:#c4b5fd;transform:translateY(-2px);box-shadow:0 5px 16px rgba(167,139,250,.3)}
+.tcard{background:var(--s1);border:1px solid var(--b1);border-radius:var(--rl);padding:16px;margin-bottom:12px;transition:border-color .18s}
+.tcard:hover{border-color:var(--b2)}.tcard.open{border-color:rgba(74,222,128,.3);background:rgba(74,222,128,.02)}
+.tcard-title{font-size:14px;font-weight:800;margin-bottom:3px}
+.tcard-meta{font-family:var(--mono);font-size:10px;color:var(--td)}
+.tcard-acts{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap}
+.invite-box{background:var(--s2);border:1px solid var(--b1);border-radius:var(--r);padding:10px 12px;display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;color:var(--ac);word-break:break-all;margin-top:8px}
+.eprev{background:var(--s2);border:1px solid var(--b1);border-radius:var(--rl);overflow:hidden;margin-top:10px}
+.ebar{background:var(--s3);border-bottom:1px solid var(--b1);padding:8px 14px;display:flex;align-items:center;gap:6px}
+.edot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.efname{font-family:var(--mono);font-size:10px;color:var(--td);margin-left:4px}
+.epre{font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--tm);padding:12px 16px;max-height:180px;overflow:auto;white-space:pre;tab-size:2}
+.elines{min-width:32px;border-right:1px solid var(--b1);background:var(--s3);padding:12px 8px;font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--tdd);text-align:right;user-select:none;flex-shrink:0}
+.sbar-wrap{height:4px;background:var(--b1);border-radius:99px;overflow:hidden;margin-top:6px}
+.sbar{height:100%;border-radius:99px;transition:width .4s}
+.spin{width:13px;height:13px;border:2px solid rgba(74,222,128,.2);border-top-color:var(--ac);border-radius:50%;animation:rot .7s linear infinite;flex-shrink:0}
+@keyframes rot{to{transform:rotate(360deg)}}
+.db-dot{width:8px;height:8px;border-radius:50%;background:var(--wa);display:inline-block;margin-right:6px;transition:background .3s}
+.db-dot.ok{background:var(--ac)}
+#modal-bg{position:fixed;inset:0;background:rgba(3,4,6,.9);display:none;align-items:center;justify-content:center;z-index:999;padding:16px;backdrop-filter:blur(6px)}
+#modal-bg.show{display:flex}
+.modal{background:var(--s1);border:1px solid var(--b2);border-radius:var(--rxl);width:100%;max-width:700px;max-height:90vh;overflow-y:auto;padding:24px;position:relative}
+.modal::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--ac),transparent);opacity:.6;pointer-events:none}
+.modal-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:12px}
+.modal-title{font-size:17px;font-weight:800;letter-spacing:-.3px}
+.modal-sub{font-size:10px;color:var(--td);font-family:var(--mono);margin-top:3px}
+.modal-x{background:var(--s2);border:1px solid var(--b1);border-radius:7px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--td);font-size:14px;flex-shrink:0;transition:all .15s}
+.modal-x:hover{color:var(--tx);border-color:var(--b2)}
+#grade-modal-bg{position:fixed;inset:0;background:rgba(3,4,6,.9);display:none;align-items:center;justify-content:center;z-index:999;padding:16px;backdrop-filter:blur(6px)}
+.hr{height:1px;background:var(--b1);margin:14px 0}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--b2);border-radius:3px}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.fade{animation:fadeIn .22s ease}
+.online-dot{width:8px;height:8px;border-radius:50%;background:var(--ac);display:inline-block;box-shadow:0 0 6px var(--ac);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.student-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--b1);transition:background .13s}
+.student-row:last-child{border-bottom:none}
+.student-row:hover{background:var(--s2)}
+.lb-row{display:grid;grid-template-columns:32px 1fr auto auto;gap:10px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--b1)}
+.lb-row:last-child{border-bottom:none}
+.lb-rank{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--td);text-align:center}
+.lb-rank.gold{color:#fbbf24}.lb-rank.silver{color:#94a3b8}.lb-rank.bronze{color:#cd7c4a}
+.poll-card{border-radius:var(--rl);padding:14px 16px;margin-bottom:10px;border:1px solid rgba(34,211,238,.3);background:rgba(34,211,238,.04)}
+.poll-question{font-size:14px;font-weight:700;color:var(--tx);margin-bottom:10px;line-height:1.5}
+.poll-meta{font-family:var(--mono);font-size:9px;color:var(--tdd);margin-bottom:10px}
+.poll-bar-wrap{height:8px;background:var(--b2);border-radius:99px;overflow:hidden;margin-top:4px}
+.poll-bar-yes{height:100%;background:var(--ac);border-radius:99px;transition:width .5s}
+.poll-bar-no{height:100%;background:var(--er);border-radius:99px;transition:width .5s}
+.poll-resp-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--b1);font-size:12px}
+.poll-resp-row:last-child{border-bottom:none}
+.poll-yes-chip{background:var(--acg);color:var(--ac);border:1px solid var(--acd);border-radius:99px;padding:2px 10px;font-family:var(--mono);font-size:10px;font-weight:700}
+.poll-no-chip{background:var(--erg);color:var(--er);border:1px solid rgba(248,113,113,.25);border-radius:99px;padding:2px 10px;font-family:var(--mono);font-size:10px;font-weight:700}
+.cmt-card{border-radius:var(--rl);padding:14px 16px;margin-bottom:10px;position:relative;border:1px solid var(--b2)}
+.cmt-card.broadcast{background:rgba(251,191,36,.06);border-color:rgba(251,191,36,.3)}
+.cmt-card.private{background:rgba(96,165,250,.05);border-color:rgba(96,165,250,.25)}
+.cmt-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px;flex-wrap:wrap}
+.cmt-to{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.5px}
+.cmt-to.broadcast{color:var(--wa)}.cmt-to.private{color:var(--bl)}
+.cmt-time{font-family:var(--mono);font-size:9px;color:var(--tdd)}
+.cmt-msg{font-size:13px;color:var(--tx);line-height:1.7;font-weight:500}
+.cmt-del{background:transparent;border:none;cursor:pointer;color:var(--tdd);font-size:13px;padding:2px 6px;border-radius:4px;transition:color .15s}
+.cmt-del:hover{color:var(--er)}
+.smsg-card{
+border-radius:var(--rl);padding:14px 16px;margin-bottom:10px;
+border:1px solid rgba(167,139,250,.3);
+background:rgba(167,139,250,.05);
+animation:fadeIn .22s ease;
+position:relative;
+}
+.smsg-card.unread{
+border-color:rgba(167,139,250,.55);
+background:rgba(167,139,250,.1);
+}
+.smsg-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:7px;flex-wrap:wrap}
+.smsg-from{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--pu);letter-spacing:.5px}
+.smsg-time{font-family:var(--mono);font-size:9px;color:var(--tdd)}
+.smsg-msg{font-size:13px;color:var(--tx);line-height:1.7;font-weight:500}
+.smsg-unread-dot{
+width:8px;height:8px;border-radius:50%;background:var(--pu);
+display:inline-block;flex-shrink:0;margin-right:4px;
+box-shadow:0 0 6px var(--pu);animation:pulse 2s infinite;
+}
+</style>
+</head>
+<body>
+<!-- LOGIN -->
+<div id="login-screen">
+<div class="login-card">
+<div class="login-logo-big">⌨</div>
+<div class="login-site-name">THEDAKSON'S_PLAYGROUND ©</div>
+<div class="login-heading">DAKALO'S CODETEST</div>
+<div class="login-sub">Admin (DK) --- Restricted Access</div>
+<div id="db-status" style="margin-bottom:16px;font-family:var(--mono);font-size:10px;color:var(--td)">
+<span class="db-dot" id="db-dot"></span><span id="db-status-txt">Connecting to database...</span>
+</div>
+<div style="text-align:left">
+<div class="field">
+<label class="lbl" for="pw">Admin Password</label>
+<input class="inp" id="pw" type="password" placeholder="Enter password..." onkeydown="if(event.key==='Enter')doLogin()"/>
+</div>
+<div id="pw-err" class="note note-err" style="display:none">⚠ Incorrect password.</div>
+<button class="btn btn-p btn-f" onclick="doLogin()">Enter Admin Panel →</button>
+</div>
+<div style="margin-top:20px;font-family:var(--mono);font-size:9px;color:var(--tdd);letter-spacing:.5px">THEDAKSON'S_PLAYGROUND © --- All rights reserved</div>
+</div>
+</div>
+<!-- TOPBAR -->
+<div id="topbar" style="display:none">
+<div class="inner">
+<div class="tb-logo">⌨</div>
+<div>
+<div class="tb-site">THEDAKSON'S_PLAYGROUND ©</div>
+<div class="tb-title">DAKALO'S CODETEST</div>
+</div>
+<div class="tb-sep"></div>
+<span class="chip" id="tb-status"></span>
+<div class="tb-right">
+<span style="font-family:var(--mono);font-size:10px;color:var(--td)"><span class="db-dot ok"></span>Live</span>
+<span class="chip chip-blue" id="tb-students">0 students</span>
+<button class="btn btn-g btn-sm" onclick="logout()">Sign out</button>
+</div>
+</div>
+</div>
+<!-- MAIN APP -->
+<div id="main-app">
+<div class="tabs">
+<button class="tab on" data-tab="dashboard" onclick="switchTab(this)">Dashboard</button>
+<button class="tab" data-tab="tests" onclick="switchTab(this)">Tests</button>
+<button class="tab" data-tab="submissions" onclick="switchTab(this)">Submissions</button>
+<button class="tab" data-tab="students" onclick="switchTab(this)">Students</button>
+<button class="tab" data-tab="comments" onclick="switchTab(this)">💬 Comments</button>
+<button class="tab" data-tab="student-messages" onclick="switchTab(this)" id="tab-btn-student-messages">📩 Messages</button>
+</div>
+<div class="tab-content on" id="tab-dashboard">
+<div class="g4" id="dash-stats" style="margin-bottom:14px"></div>
+<div class="card">
+<div class="card-hd"><div class="card-ico">🔗</div><span class="card-lbl">Student Website Link</span>
+<div class="card-acts"><button class="btn btn-p btn-sm" onclick="openPostModal(null)">+ Post New Test</button></div>
+</div>
+<div class="card-body">
+<div style="font-size:12px;color:var(--td);margin-bottom:4px">Share this link --- it opens the <strong style="color:var(--tx)">testTakers website</strong> on any device.</div>
+<div class="invite-box">
+<span id="student-url-display" style="flex:1;font-size:10px">https://dakalostestingsite.netlify.app/testTakers.html</span>
+<button class="btn btn-sm btn-s" id="copy-btn" onclick="copyLink()">Copy</button>
+</div>
+</div>
+</div>
+<div class="card">
+<div class="card-hd"><div class="card-ico">📋</div><span class="card-lbl">Open Tests</span></div>
+<div id="dash-open-tests"><div class="empty">No tests open.</div></div>
+</div>
+<div class="card">
+<div class="card-hd"><div class="card-ico">📥</div><span class="card-lbl">Recent Submissions</span></div>
+<div id="dash-recent-subs"><div class="empty">No submissions yet.</div></div>
+</div>
+</div>
+<div class="tab-content" id="tab-tests">
+<div style="display:flex;justify-content:flex-end;margin-bottom:14px">
+<button class="btn btn-p" onclick="openPostModal(null)">+ Post New Test</button>
+</div>
+<div id="tests-list"><div class="card"><div class="empty">No tests posted yet.</div></div></div>
+</div>
+<div class="tab-content" id="tab-submissions">
+<div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center">
+<select class="inp" id="subs-test-filter" style="max-width:260px;padding:7px 10px;font-size:11px" onchange="applySubsFilter()">
+<option value="">All Tests</option>
+</select>
+<select class="inp" id="subs-grade-filter" style="max-width:150px;padding:7px 10px;font-size:11px" onchange="applySubsFilter()">
+<option value="">All Grades</option>
+<option value="pending">⏳ Pending</option>
+<option value="pass">✅ Pass (≥70)</option>
+<option value="review">🔶 Review (50-69)</option>
+<option value="fail">❌ Fail (<50)</option>
+</select>
+<span id="subs-count" style="font-family:var(--mono);font-size:10px;color:var(--td);margin-left:auto"></span>
+</div>
+<div id="subs-list"><div class="card"><div class="empty">No submissions yet.</div></div></div>
+</div>
+<div class="tab-content" id="tab-comments">
+<div class="card" style="margin-bottom:14px">
+<div class="card-hd"><div class="card-ico">🗳️</div><span class="card-lbl">Send a Yes/No Poll</span></div>
+<div class="card-body">
+<div class="field">
+<label class="lbl">Ask All Students</label>
+<input class="inp" id="poll-question" placeholder="e.g. Are you ready for the test? / Did you understand the task?"/>
+</div>
+<div style="display:flex;justify-content:flex-end;margin-top:4px">
+<button class="btn btn-cy" onclick="sendPoll()">🗳️ Send Poll</button>
+</div>
+</div>
+</div>
+<div class="card" style="margin-bottom:14px">
+<div class="card-hd"><div class="card-ico">📊</div><span class="card-lbl">Poll Results</span></div>
+<div id="polls-list"><div class="empty">No polls sent yet.</div></div>
+</div>
+<div class="card" style="margin-bottom:14px">
+<div class="card-hd"><div class="card-ico">✉️</div><span class="card-lbl">Send a Comment / Announcement</span></div>
+<div class="card-body">
+<div class="field">
+<label class="lbl">Send To</label>
+<select class="inp" id="cmt-target">
+<option value="__all__">📢 Broadcast --- All Students</option>
+</select>
+</div>
+<div class="field">
+<label class="lbl">Message</label>
+<textarea class="inp" id="cmt-text" rows="4" placeholder="Type your comment or announcement here..."></textarea>
+</div>
+<div style="display:flex;justify-content:flex-end;margin-top:4px">
+<button class="btn btn-p" onclick="sendComment()">📨 Send Comment</button>
+</div>
+</div>
+</div>
+<div class="card">
+<div class="card-hd"><div class="card-ico">📬</div><span class="card-lbl">Sent Comments</span></div>
+<div id="comments-list"><div class="empty">No comments sent yet.</div></div>
+</div>
+</div>
+<div class="tab-content" id="tab-students">
+<div class="card" style="margin-bottom:14px">
+<div class="card-hd">
+<div class="card-ico">🟢</div>
+<span class="card-lbl">Online Now</span>
+<span id="online-count" style="margin-left:6px;font-family:var(--mono);font-size:10px;color:var(--ac)"></span>
+</div>
+<div id="online-list"><div class="empty">No students online.</div></div>
+</div>
+<div class="card">
+<div class="card-hd">
+<div class="card-ico">🎓</div>
+<span class="card-lbl" id="students-hd-lbl">All Students</span>
+<div class="card-acts">
+<input class="inp" id="student-search" placeholder="Search by name..." style="padding:5px 10px;font-size:10px;width:160px;margin-left:auto" oninput="filterStudents()"/>
+</div>
+</div>
+<div id="students-list"><div class="empty">No students yet.</div></div>
+</div>
+</div>
+<div class="tab-content" id="tab-student-messages">
+<div class="card" style="margin-bottom:14px">
+<div class="card-hd">
+<div class="card-ico">📩</div>
+<span class="card-lbl">Student Messages</span>
+<span id="smsg-count-badge" style="margin-left:6px;font-family:var(--mono);font-size:10px;color:var(--pu)"></span>
+<div class="card-acts">
+<button class="btn btn-g btn-sm" onclick="markAllMsgsRead()">✓ Mark All Read</button>
+</div>
+</div>
+<div id="student-messages-list"><div class="empty">No student messages yet.</div></div>
+</div>
+</div>
+</div>
+<!-- POST MODAL -->
+<div id="modal-bg">
+<div class="modal">
+<div class="modal-hd">
+<div><div class="modal-title" id="modal-title-txt">Post New Test</div>
+<div class="modal-sub">Students see this once you open it.</div></div>
+<div class="modal-x" onclick="closeModal()">✕</div>
+</div>
+<div class="field"><label class="lbl">Test Title</label>
+<input class="inp" id="m-title" placeholder="e.g. Python Fundamentals --- Week 3"/></div>
+<div class="field"><label class="lbl">Description</label>
+<textarea class="inp" id="m-desc" rows="2" placeholder="Brief overview..."></textarea></div>
+<div class="field"><label class="lbl">Question / Problem Statement</label>
+<textarea class="inp" id="m-question" rows="9" style="font-family:var(--mono);font-size:11px" placeholder="Write the full question here...&#10;&#10;Example:&#10; Write a function that returns the sum of a list.&#10;&#10;Constraints:&#10; - Handle empty lists&#10; - Return an integer"></textarea></div>
+<div class="g2" style="margin-bottom:12px">
+<div class="field" style="margin-bottom:0"><label class="lbl">Duration (seconds)</label>
+<input class="inp" id="m-duration" type="number" min="30" value="300"/></div>
+<div class="field" style="margin-bottom:0"><label class="lbl">Language</label>
+<select class="inp" id="m-lang">
+<option value="python">Python</option><option value="javascript">JavaScript</option>
+<option value="java">Java</option><option value="c">C</option>
+<option value="cpp">C++</option><option value="other">Other</option>
+</select></div>
+</div>
+<div class="g2" style="margin-bottom:12px">
+<div class="field" style="margin-bottom:0"><label class="lbl">Submission Mode</label>
+<select class="inp" id="m-mode">
+<option value="editor">Code Editor (type in browser)</option>
+<option value="upload">ZIP File Upload</option>
+</select></div>
+<div class="field" style="margin-bottom:0">
+<label class="lbl">Max Submissions Per Student</label>
+<input class="inp" id="m-maxsubs" type="number" min="1" max="20" value="1" style="text-align:center"/>
+<div style="font-family:var(--mono);font-size:9px;color:var(--tdd);margin-top:4px">How many times each student can submit</div>
+</div>
+</div>
+<div class="hr"></div>
+<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+<label style="display:flex;align-items:center;gap:9px;cursor:pointer;font-size:12px">
+<input type="checkbox" id="m-open" style="width:14px;height:14px;accent-color:var(--ac);cursor:pointer"/>
+Open immediately after saving
+</label>
+<div style="display:flex;gap:8px">
+<button class="btn btn-g" onclick="closeModal()">Cancel</button>
+<button class="btn btn-p" id="save-test-btn" onclick="saveTest()">📋 Post Test</button>
+</div>
+</div>
+<input type="hidden" id="m-edit-id"/>
+</div>
+</div>
+<!-- GRADE MODAL -->
+<div id="grade-modal-bg" style="position:fixed;inset:0;background:rgba(3,4,6,.9);display:none;align-items:center;justify-content:center;z-index:999;padding:16px;backdrop-filter:blur(6px)">
+<div class="modal" id="grade-modal-inner"></div>
+</div>
+<!-- REPLY MODAL -->
+<div id="reply-modal-bg">
+<div class="reply-modal">
+<div class="modal-hd">
+<div>
+<div class="modal-title" style="color:var(--pu)">↩ Reply to Student</div>
+<div class="modal-sub" id="reply-modal-sub"></div>
+</div>
+<div class="modal-x" onclick="closeReplyModal()">✕</div>
+</div>
+<div style="background:var(--s2);border:1px solid var(--b1);border-radius:var(--r);padding:12px 14px;margin-bottom:16px">
+<div style="font-family:var(--mono);font-size:9px;color:var(--td);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Original Message</div>
+<div id="reply-original-msg" style="font-size:13px;color:var(--tm);line-height:1.7"></div>
+</div>
+<div class="field">
+<label class="lbl">Your Reply</label>
+<textarea class="inp" id="reply-text" rows="5" placeholder="Type your private reply to this student..." oninput="onReplyInput()"></textarea>
+</div>
+<div id="reply-err" class="note note-err" style="display:none;margin-top:-6px">Please write a reply before sending.</div>
+<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+<button class="btn btn-g" onclick="closeReplyModal()">Cancel</button>
+<button class="btn btn-pu" id="reply-send-btn" onclick="sendReply()">📩 Send Reply</button>
+</div>
+<input type="hidden" id="reply-msg-id"/>
+<input type="hidden" id="reply-student-name"/>
+</div>
+</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, get, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyBG0WAk7sbSIrbZSUkDo-lZeUbXTsJIsiA",
+authDomain: "dakalo-codetest.firebaseapp.com",
+databaseURL: "https://dakalo-codetest-default-rtdb.firebaseio.com",
+projectId: "dakalo-codetest",
+storageBucket: "dakalo-codetest.firebasestorage.app",
+messagingSenderId: "95189384336",
+appId: "1:95189384336:web:c87d8e7f93c35cb0972c15",
+measurementId: "G-LGR6LXNCYY"
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const dot = document.getElementById('db-dot');
+const dtxt = document.getElementById('db-status-txt');
+onValue(ref(db, '.info/connected'), snap => {
+const ok = snap.val();
+dot.className = 'db-dot ' + (ok ? 'ok' : 'err');
+dtxt.textContent = ok ? 'Database connected ✓' : 'Reconnecting...';
+});
+
+const ADMIN_PW = 'THEDAKSON123';
+const STUDENT_URL = 'https://The-Dakson.github.io/dakson-codetest/testTakers.html';
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const fmt = s => String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+const langExt = l => ({python:'py',javascript:'js',java:'java',c:'c',cpp:'cpp'}[l]||'txt');
+const sLabel = s => s==null?'PENDING':s>=70?'PASS':s>=50?'REVIEW':'FAIL';
+const sBadge = s => s==null?'badge-gray':s>=70?'badge-green':s>=50?'badge-amber':'badge-red';
+const sColVar = s => s==null?'var(--td)':s>=70?'var(--ac)':s>=50?'var(--wa)':'var(--er)';
+const uid = () => 'id_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+
+let cache = { tests:{}, subs:{}, students:{}, comments:{}, presence:{}, polls:{}, pollResponses:{}, studentMessages:{} };
+let _unsubs = [];
+let _renderTimer = null;
+function scheduleRender() { clearTimeout(_renderTimer); _renderTimer = setTimeout(renderAll, 30); }
+
+window.doLogin = () => {
+const v = document.getElementById('pw').value;
+if (v === ADMIN_PW) {
+document.getElementById('login-screen').style.display = 'none';
+document.getElementById('topbar').style.display = 'block';
+document.getElementById('main-app').style.display = 'block';
+startListeners();
+} else {
+document.getElementById('pw-err').style.display = 'flex';
+document.getElementById('pw').value = '';
+}
+};
+document.getElementById('pw').addEventListener('keydown', e => { if(e.key==='Enter') window.doLogin(); });
+
+window.logout = () => {
+_unsubs.forEach(u => u());
+_unsubs = [];
+cache = { tests:{}, subs:{}, students:{}, comments:{}, presence:{}, polls:{}, pollResponses:{}, studentMessages:{} };
+document.getElementById('login-screen').style.display = 'flex';
+document.getElementById('topbar').style.display = 'none';
+document.getElementById('main-app').style.display = 'none';
+document.getElementById('pw').value = '';
+};
+
+function startListeners() {
+_unsubs.forEach(u => u());
+_unsubs = [];
+_unsubs.push(onValue(ref(db,'tests'), snap => { cache.tests = snap.val() || {}; scheduleRender(); }));
+_unsubs.push(onValue(ref(db,'submissions'), snap => { cache.subs = snap.val() || {}; scheduleRender(); }));
+_unsubs.push(onValue(ref(db,'students'), snap => { cache.students = snap.val() || {}; scheduleRender(); }));
+_unsubs.push(onValue(ref(db,'comments'), snap => { cache.comments = snap.val() || {}; renderComments(); scheduleRender(); }));
+_unsubs.push(onValue(ref(db,'presence'), snap => { cache.presence = snap.val() || {}; scheduleRender(); }));
+_unsubs.push(onValue(ref(db,'polls'), snap => { cache.polls = snap.val() || {}; renderPolls(); }));
+_unsubs.push(onValue(ref(db,'pollResponses'), snap => { cache.pollResponses = snap.val() || {}; renderPolls(); }));
+_unsubs.push(onValue(ref(db,'studentMessages'), snap => { cache.studentMessages = snap.val() || {}; renderStudentMessages(); }));
+}
+
+window.switchTab = btn => {
+document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('on'));
+btn.classList.add('on');
+document.getElementById('tab-'+btn.dataset.tab).classList.add('on');
+if (btn.dataset.tab === 'submissions') applySubsFilter();
+};
+
+window.copyLink = () => {
+navigator.clipboard.writeText(STUDENT_URL).catch(()=>{});
+const btn = document.getElementById('copy-btn');
+btn.textContent='✓ Copied'; btn.classList.add('btn-p'); btn.classList.remove('btn-s');
+setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('btn-p');btn.classList.add('btn-s');},2000);
+};
+
+function renderAll() {
+const tests = Object.values(cache.tests);
+const subs = Object.values(cache.subs);
+const students = Object.values(cache.students);
+const openTests = tests.filter(t => t.isOpen);
+const graded = subs.filter(s => s.grade?.score != null).length;
+const scores = subs.filter(s => s.grade?.score != null).map(s => s.grade.score);
+const avg = scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : null;
+
+document.getElementById('tb-status').textContent = openTests.length>0 ? `● ${openTests.length} OPEN` : '○ CLOSED';
+document.getElementById('tb-status').className = 'chip ' + (openTests.length>0 ? 'chip-green' : '');
+document.getElementById('tb-students').textContent = students.length + ' students';
+
+document.getElementById('dash-stats').innerHTML = [
+['Tests', tests.length, 'pu'],
+['Submissions',subs.length, 'cyan'],
+['Graded', graded, 'green'],
+['Avg Score', avg!=null?avg+'%':'---', avg!=null?(avg>=70?'green':avg>=50?'amber':'red'):'blue'],
+].map(([l,v,c])=>`<div class="stat"><div class="stat-l">${l}</div><div class="stat-v ${c}">${v}</div></div>`).join('');
+
+document.getElementById('dash-open-tests').innerHTML = openTests.length===0
+? '<div class="empty">No tests open. Post a test and open it.</div>'
+: openTests.map(t=>`
+<div class="row" onclick="openPostModal('${t.id}')">
+<div><div class="row-name">${esc(t.title)}</div>
+<div class="row-meta">⏱ ${fmt(t.duration)} · ${t.submissionType==='editor'?'Code Editor':'ZIP'} · ${subs.filter(s=>s.testId===t.id).length} submissions</div></div>
+<span class="badge badge-green">OPEN</span>
+<button class="btn btn-d btn-sm" onclick="event.stopPropagation();toggleTest('${t.id}',false)">⏸ Close</button>
+<button class="btn btn-g btn-sm" onclick="event.stopPropagation();openPostModal('${t.id}')">Edit</button>
+</div>`).join('');
+
+const recent = [...subs].sort((a,b)=>b.submittedAt-a.submittedAt).slice(0,8);
+document.getElementById('dash-recent-subs').innerHTML = recent.length===0
+? '<div class="empty">No submissions yet.</div>'
+: recent.map(sub=>`
+<div class="row" onclick="openGradeModal('${sub.id}')">
+<div><div class="row-name">${esc(sub.studentName)}</div>
+<div class="row-meta">${new Date(sub.submittedAt).toLocaleTimeString()} · ${esc(cache.tests[sub.testId]?.title||'?')}</div></div>
+<span class="badge ${sBadge(sub.grade?.score)}">${sLabel(sub.grade?.score)}</span>
+${sub.grade?.score!=null?`<span style="font-family:var(--mono);font-size:12px;font-weight:700;color:${sColVar(sub.grade.score)}">${sub.grade.score}</span>`:'<span></span>'}
+<button class="btn btn-g btn-sm">Grade →</button>
+</div>`).join('');
+
+document.getElementById('tests-list').innerHTML = tests.length===0
+? '<div class="card"><div class="empty">No tests posted yet.</div></div>'
+: [...tests].sort((a,b)=>b.createdAt-a.createdAt).map(t=>{
+const tSubs = subs.filter(s=>s.testId===t.id);
+const tG = tSubs.filter(s=>s.grade?.score!=null);
+const tAvg = tG.length ? Math.round(tG.reduce((a,s)=>a+s.grade.score,0)/tG.length) : null;
+const attemptMap = {};
+tSubs.forEach(s=>{ attemptMap[s.studentName]=(attemptMap[s.studentName]||0)+1; });
+const maxedOut = Object.values(attemptMap).filter(c=>c>=(t.maxSubmissions||1)).length;
+return `<div class="tcard ${t.isOpen?'open':''}">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap">
+<div style="flex:1;min-width:0">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;flex-wrap:wrap">
+<div class="tcard-title">${esc(t.title)}</div>
+<span class="badge ${t.isOpen?'badge-green':'badge-gray'}">${t.isOpen?'OPEN':'CLOSED'}</span>
+${t.language?`<span class="badge badge-pu">${t.language.toUpperCase()}</span>`:''}
+</div>
+<div class="tcard-meta">Posted ${new Date(t.createdAt).toLocaleString()} · ⏱ ${fmt(t.duration)} · ${t.submissionType==='editor'?'Code Editor':'ZIP'} · ${t.maxSubmissions||1} attempt${(t.maxSubmissions||1)!==1?'s':''} allowed</div>
+<div style="font-size:10px;color:var(--tdd);font-family:var(--mono);margin-top:3px">
+${tSubs.length} submissions · ${tG.length} graded${tAvg!=null?' · avg '+tAvg+'%':''}
+${maxedOut>0?` · <span style="color:var(--er)">${maxedOut} student${maxedOut!==1?'s':''} maxed out</span>`:''}
+</div>
+</div>
+</div>
+${t.description?`<div style="font-size:12px;color:var(--tm);margin-top:8px;line-height:1.6">${esc(t.description)}</div>`:''}
+<div class="tcard-acts">
+<button class="btn ${t.isOpen?'btn-d':'btn-p'} btn-sm" onclick="toggleTest('${t.id}',${!t.isOpen})">${t.isOpen?'⏸ Close':'▶ Open'}</button>
+<button class="btn btn-s btn-sm" onclick="openPostModal('${t.id}')">✎ Edit</button>
+<button class="btn btn-g btn-sm" onclick="jumpToSubs('${t.id}')">Subs (${tSubs.length})</button>
+<button class="btn btn-d btn-sm" onclick="deleteTest('${t.id}')">🗑 Delete</button>
+</div>
+</div>`;
+}).join('');
+
+const filterSel = document.getElementById('subs-test-filter');
+if (filterSel) {
+const curVal = filterSel.value;
+filterSel.innerHTML = '<option value="">All Tests</option>' + tests.map(t=>`<option value="${esc(t.id)}">${esc(t.title)}</option>`).join('');
+if (curVal) filterSel.value = curVal;
+}
+applySubsFilter();
+
+const now = Date.now();
+const ONLINE_THRESHOLD = 2 * 60 * 1000;
+const presenceVals = Object.values(cache.presence||{});
+const onlineStudents = presenceVals.filter(p=>(now-p.lastSeen)<ONLINE_THRESHOLD);
+const onlineNames = new Set(onlineStudents.map(p=>p.name));
+const onlineEl = document.getElementById('online-list');
+if (onlineEl) {
+document.getElementById('online-count').textContent = onlineStudents.length>0 ? `(${onlineStudents.length})` : '';
+onlineEl.innerHTML = onlineStudents.length===0
+? '<div class="empty">No students online right now.</div>'
+: onlineStudents.map(p=>`
+<div class="student-row">
+<span class="online-dot"></span>
+<span style="font-size:13px;font-weight:600;flex:1">${esc(p.name)}</span>
+<span style="font-family:var(--mono);font-size:10px;color:var(--td)">${esc(p.activity||'Browsing')}</span>
+</div>`).join('');
+}
+window._cachedStudents = students;
+window._cachedSubs = subs;
+window._cachedOnline = onlineNames;
+filterStudents();
+}
+
+window.jumpToSubs = testId => {
+window.switchTab(document.querySelector('[data-tab=submissions]'));
+setTimeout(()=>{
+const sel = document.getElementById('subs-test-filter');
+if (sel) { sel.value = testId; applySubsFilter(); }
+}, 50);
+};
+
+window.applySubsFilter = function() {
+const testFilter = document.getElementById('subs-test-filter')?.value || '';
+const gradeFilter = document.getElementById('subs-grade-filter')?.value || '';
+const allSubs = Object.values(cache.subs);
+let filtered = [...allSubs].sort((a,b)=>b.submittedAt-a.submittedAt);
+if (testFilter) filtered = filtered.filter(s=>s.testId===testFilter);
+if (gradeFilter==='pending') filtered = filtered.filter(s=>s.grade?.score==null);
+if (gradeFilter==='pass') filtered = filtered.filter(s=>s.grade?.score>=70);
+if (gradeFilter==='review') filtered = filtered.filter(s=>s.grade?.score>=50&&s.grade.score<70);
+if (gradeFilter==='fail') filtered = filtered.filter(s=>s.grade?.score!=null&&s.grade.score<50);
+const countEl = document.getElementById('subs-count');
+if (countEl) countEl.textContent = `${filtered.length} result${filtered.length!==1?'s':''}`;
+const el = document.getElementById('subs-list');
+if (!el) return;
+if (filtered.length===0) {
+el.innerHTML = '<div class="card"><div class="empty">No submissions match the current filter.</div></div>';
+return;
+}
+el.innerHTML = filtered.map(sub => {
+const test = cache.tests[sub.testId];
+const cLines = (sub.code||'').split('\n');
+return `<div class="card fade">
+<div class="card-body">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:${sub.code||sub.fileName?'12px':'0'}">
+<div>
+<div style="font-weight:800;font-size:14px">${esc(sub.studentName)}</div>
+<div style="font-family:var(--mono);font-size:10px;color:var(--td);margin-top:2px">
+${new Date(sub.submittedAt).toLocaleString()} · ${esc(test?.title||'?')}
+${sub.timeUsed!=null?' · ⏱ '+fmt(sub.timeUsed)+' used':''}
+${sub.autoSubmit?' · <span style="color:var(--wa)">auto-submitted</span>':''}
+</div>
+</div>
+<div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">
+<span class="badge ${sBadge(sub.grade?.score)}">${sLabel(sub.grade?.score)}</span>
+${sub.grade?.score!=null?`<span style="font-family:var(--mono);font-size:16px;font-weight:700;color:${sColVar(sub.grade.score)}">${sub.grade.score}/100</span>`:''}
+<button class="btn btn-s btn-sm" onclick="openGradeModal('${sub.id}')">✎ Grade</button>
+<button class="btn btn-cy btn-sm" onclick="downloadPDF('${sub.id}')">⬇ PDF</button>
+</div>
+</div>
+${sub.code?`
+<div class="eprev">
+<div class="ebar">
+<span class="edot" style="background:#f87171"></span>
+<span class="edot" style="background:#fbbf24"></span>
+<span class="edot" style="background:#4ade80"></span>
+<span class="efname">${esc(sub.studentName.replace(/\s+/g,'_').toLowerCase())}_solution.${langExt(test?.language)}</span>
+<span style="margin-left:auto;font-family:var(--mono);font-size:9px;color:var(--tdd)">${cLines.length} lines</span>
+</div>
+<div style="display:flex;max-height:180px;overflow:hidden">
+<div class="elines">${cLines.map((_,i)=>i+1).join('<br>')}</div>
+<pre class="epre" style="flex:1;overflow:auto">${esc(sub.code)}</pre>
+</div>
+</div>`:sub.fileName?`<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+<div style="display:inline-flex;align-items:center;gap:7px;background:var(--s2);border:1px solid var(--b1);border-radius:6px;padding:6px 12px;font-family:var(--mono);font-size:11px;color:var(--ac)">
+📦 ${esc(sub.fileName)}${sub.fileSize?' · '+sub.fileSize+' KB':''}
+</div>
+${sub.fileData?`<button class="btn btn-p btn-sm" onclick="downloadZip('${sub.id}')">⬇ Download ZIP</button>`:'<span style="font-family:var(--mono);font-size:10px;color:var(--er)">⚠ File data not saved</span>'}
+</div>`:''}
+${sub.grade?.feedback?`<div style="margin-top:10px;background:var(--s2);border-left:3px solid ${sColVar(sub.grade.score)};border-radius:0 6px 6px 0;padding:10px 12px;font-size:11px;color:var(--tm);line-height:1.7">
+<div style="font-family:var(--mono);font-size:9px;color:var(--td);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">📝 Feedback</div>
+${esc(sub.grade.feedback)}</div>`:''}
+</div>
+</div>`;
+}).join('');
+};
+
+window.filterStudents = function() {
+const q = (document.getElementById('student-search')?.value||'').toLowerCase().trim();
+const students = (window._cachedStudents||[]).filter(s=>!q||s.name.toLowerCase().includes(q));
+const subs = window._cachedSubs||[];
+const onlineNames = window._cachedOnline||new Set();
+document.getElementById('students-hd-lbl').textContent = `All Students (${students.length})`;
+document.getElementById('students-list').innerHTML = students.length===0
+? '<div class="empty">No students match your search.</div>'
+: students.map(st=>{
+const stSubs = subs.filter(s=>s.studentName===st.name);
+const latest = [...stSubs].sort((a,b)=>b.submittedAt-a.submittedAt)[0];
+const isOnline = onlineNames.has(st.name);
+return `<div class="row">
+<div style="display:flex;align-items:center;gap:8px">
+${isOnline?'<span class="online-dot"></span>':'<span style="width:8px;height:8px;border-radius:50%;background:var(--tdd);display:inline-block"></span>'}
+<div><div class="row-name">${esc(st.name)}</div>
+<div class="row-meta">${stSubs.length} submission${stSubs.length!==1?'s':''} · Joined ${new Date(st.registeredAt).toLocaleDateString()}</div>
+</div>
+</div>
+${latest?`<span class="badge ${sBadge(latest.grade?.score)}">${sLabel(latest.grade?.score)}</span>`:'<span class="badge badge-gray">NO SUBS</span>'}
+${latest?.grade?.score!=null?`<span style="font-family:var(--mono);font-size:12px;font-weight:700;color:${sColVar(latest.grade.score)}">${latest.grade.score}/100</span>`:'<span></span>'}
+${latest?`<button class="btn btn-cy btn-sm" onclick="downloadPDF('${latest.id}')">⬇ PDF</button>`:'<span></span>'}
+</div>`;
+}).join('');
+};
+
+window.toggleTest = (id, openState) => { update(ref(db,`tests/${id}`), { isOpen: openState }); };
+window.deleteTest = id => { if (!confirm('Delete this test?')) return; remove(ref(db,`tests/${id}`)); };
+
+window.openPostModal = editId => {
+const t = editId ? cache.tests[editId] : null;
+document.getElementById('modal-title-txt').textContent = t ? 'Edit Test' : 'Post New Test';
+document.getElementById('m-edit-id').value = t?.id||'';
+document.getElementById('m-title').value = t?.title||'';
+document.getElementById('m-desc').value = t?.description||'';
+document.getElementById('m-question').value = t?.question||'';
+document.getElementById('m-duration').value = t?.duration||300;
+document.getElementById('m-lang').value = t?.language||'python';
+document.getElementById('m-mode').value = t?.submissionType||'editor';
+document.getElementById('m-maxsubs').value = t?.maxSubmissions||1;
+document.getElementById('m-open').checked = t?.isOpen||false;
+document.getElementById('save-test-btn').textContent = t ? '✓ Save Changes' : '📋 Post Test';
+document.getElementById('modal-bg').classList.add('show');
+};
+window.closeModal = () => document.getElementById('modal-bg').classList.remove('show');
+document.getElementById('modal-bg').addEventListener('click', e => { if(e.target===document.getElementById('modal-bg')) window.closeModal(); });
+window.saveTest = () => {
+const title = document.getElementById('m-title').value.trim();
+const question = document.getElementById('m-question').value.trim();
+if (!title) { alert('Please enter a test title.'); return; }
+if (!question) { alert('Please enter a test question.'); return; }
+const editId = document.getElementById('m-edit-id').value;
+const id = editId || uid();
+const obj = {
+id, title, question,
+description: document.getElementById('m-desc').value.trim(),
+duration: Number(document.getElementById('m-duration').value)||300,
+language: document.getElementById('m-lang').value,
+submissionType: document.getElementById('m-mode').value,
+maxSubmissions: Number(document.getElementById('m-maxsubs').value) || 1,
+isOpen: document.getElementById('m-open').checked,
+createdAt: editId ? (cache.tests[editId]?.createdAt||Date.now()) : Date.now(),
+};
+set(ref(db,`tests/${id}`), obj);
+window.closeModal();
+};
+
+window.openGradeModal = subId => {
+const sub = cache.subs[subId];
+if (!sub) return;
+const test = cache.tests[sub.testId];
+const cLines = (sub.code||'').split('\n');
+const pct = sub.grade?.score;
+const existingVis = sub.grade?.visibility || 'private';
+document.getElementById('grade-modal-bg').style.display='flex';
+document.getElementById('grade-modal-inner').innerHTML = `
+<div class="modal-hd">
+<div><div class="modal-title">Grading: ${esc(sub.studentName)}</div>
+<div class="modal-sub">${esc(test?.title||'?')} · ${new Date(sub.submittedAt).toLocaleString()}${sub.timeUsed!=null?' · '+fmt(sub.timeUsed)+' used':''}</div>
+</div>
+<div class="modal-x" onclick="closeGradeModal()">✕</div>
+</div>
+${sub.code?`
+<div class="eprev" style="margin-bottom:16px">
+<div class="ebar">
+<span class="edot" style="background:#f87171"></span>
+<span class="edot" style="background:#fbbf24"></span>
+<span class="edot" style="background:#4ade80"></span>
+<span class="efname">Submission · ${cLines.length} lines</span>
+</div>
+<div style="display:flex;max-height:220px;overflow:hidden">
+<div class="elines">${cLines.map((_,i)=>i+1).join('<br>')}</div>
+<pre class="epre" style="flex:1;overflow:auto">${esc(sub.code)}</pre>
+</div>
+</div>`:sub.fileName?`<div style="margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+<div style="display:inline-flex;align-items:center;gap:7px;background:var(--s2);border:1px solid var(--b1);border-radius:6px;padding:7px 12px;font-family:var(--mono);font-size:11px;color:var(--ac)">
+📦 ${esc(sub.fileName)}${sub.fileSize?' · '+sub.fileSize+' KB':''}
+</div>
+${sub.fileData?`<button class="btn btn-p btn-sm" onclick="downloadZip('${sub.id}')">⬇ Download ZIP</button>`:'<span style="font-family:var(--mono);font-size:10px;color:var(--er)">⚠ File data not saved</span>'}
+</div>`:''}
+<div style="display:flex;gap:10px;margin-bottom:16px;align-items:center">
+<button class="btn btn-cy" id="ai-btn" onclick="aiGrade('${subId}')">✦ Auto-Grade with AI</button>
+<span id="ai-msg" style="font-family:var(--mono);font-size:10px;color:var(--td)"></span>
+</div>
+<div class="hr"></div>
+<div class="field" style="margin-top:14px">
+<label class="lbl">Score (0--100)</label>
+<input class="inp" id="g-score" type="number" min="0" max="100" value="${sub.grade?.score??''}" placeholder="Enter score..." oninput="updateSBar()"/>
+<div class="sbar-wrap"><div class="sbar" id="g-sbar" style="width:${pct!=null?pct+'%':'0%'};background:${sColVar(pct)}"></div></div>
+<div style="display:flex;justify-content:space-between;margin-top:4px;font-family:var(--mono);font-size:9px;color:var(--td)">
+<span>0</span><span id="g-badge">${pct!=null?`<span class="badge ${sBadge(pct)}">${sLabel(pct)}</span>`:''}</span><span>100</span>
+</div>
+</div>
+<div class="field">
+<label class="lbl">Feedback (published on PDF)</label>
+<textarea class="inp" id="g-feedback" rows="5" placeholder="Write constructive feedback...">${esc(sub.grade?.feedback||'')}</textarea>
+</div>
+<div class="hr"></div>
+<div style="margin-bottom:10px">
+<div class="lbl" style="margin-bottom:8px">Publish Grade As</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:12px;background:var(--s2);border:1px solid var(--b1);border-radius:var(--r);padding:8px 12px;flex:1;min-width:160px">
+<input type="radio" name="grade-vis" value="private" ${existingVis==='private'?'checked':''} style="accent-color:var(--bl);cursor:pointer"/>
+<span>🔒 <strong>Private</strong> --- only this student</span>
+</label>
+<label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:12px;background:var(--s2);border:1px solid var(--b1);border-radius:var(--r);padding:8px 12px;flex:1;min-width:160px">
+<input type="radio" name="grade-vis" value="public" ${existingVis==='public'?'checked':''} style="accent-color:var(--ac);cursor:pointer"/>
+<span>🌍 <strong>Public</strong> --- visible to all students</span>
+</label>
+</div>
+</div>
+<div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:8px">
+<button class="btn btn-g" onclick="closeGradeModal()">Cancel</button>
+<button class="btn btn-cy" onclick="downloadPDF('${subId}')">⬇ PDF</button>
+<button class="btn btn-p" onclick="saveGrade('${subId}')">✓ Publish Grade</button>
+</div>`;
+};
+window.closeGradeModal = () => { document.getElementById('grade-modal-bg').style.display='none'; };
+document.getElementById('grade-modal-bg').addEventListener('click', e => { if(e.target===document.getElementById('grade-modal-bg')) window.closeGradeModal(); });
+window.updateSBar = () => {
+const v = Number(document.getElementById('g-score')?.value);
+const bar = document.getElementById('g-sbar');
+const badge = document.getElementById('g-badge');
+if (!bar) return;
+bar.style.width=v+'%'; bar.style.background=sColVar(v);
+if (badge) badge.innerHTML=`<span class="badge ${sBadge(v)}">${sLabel(v)}</span>`;
+};
+window.saveGrade = subId => {
+const scoreEl = document.getElementById('g-score');
+if (!scoreEl || scoreEl.value === '') { alert('Enter a score first.'); return; }
+const score = Math.min(100, Math.max(0, Number(scoreEl.value)));
+const visEl = document.querySelector('input[name="grade-vis"]:checked');
+const grade = {
+score,
+feedback: document.getElementById('g-feedback').value.trim(),
+gradedAt: Date.now(),
+visibility: visEl ? visEl.value : 'private',
+};
+update(ref(db,`submissions/${subId}`), { grade });
+window.closeGradeModal();
+};
+
+window.aiGrade = async subId => {
+const sub = cache.subs[subId];
+const test = cache.tests[sub?.testId];
+const btn = document.getElementById('ai-btn');
+const msg = document.getElementById('ai-msg');
+btn.disabled=true; btn.innerHTML='<div class="spin"></div> Grading...'; msg.textContent='';
+try {
+const res = await fetch('https://api.anthropic.com/v1/messages',{
+method:'POST', headers:{'Content-Type':'application/json','x-api-key':'your-api-key-here','anthropic-version':'2023-06-01'},
+body: JSON.stringify({
+model:'claude-3-sonnet-20240229', max_tokens:1000,
+messages:[{role:'user',content:`You are a programming instructor for DAKALO'S CODETEST.\n\nQUESTION:\n${test?.question||'(none)'}\n\nSTUDENT CODE:\n\`\`\`\n${sub?.code||'[File upload]'}\n\`\`\`\n\nGrade this. Respond ONLY with JSON, no markdown:\n{"score":<0-100>,"feedback":"<2-4 sentences>"}`}]
+})
+});
+const data = await res.json();
+const text = data.content?.find(b=>b.type==='text')?.text||'';
+const parsed = JSON.parse(text.replace(/```json|```/g,'').trim());
+document.getElementById('g-score').value=parsed.score;
+document.getElementById('g-feedback').value=parsed.feedback;
+window.updateSBar();
+msg.textContent='AI graded ✓'; msg.style.color='var(--ac)';
+} catch {
+msg.textContent='AI failed --- grade manually.'; msg.style.color='var(--er)';
+}
+btn.disabled=false; btn.innerHTML='✦ Auto-Grade with AI';
+};
+
+window.downloadZip = subId => {
+const sub = cache.subs[subId];
+if (!sub) { alert('Submission not found.'); return; }
+if (!sub.fileData) { alert('No file data found. The student may have submitted before the ZIP download feature was added, or the file was too large.'); return; }
+if (!sub.fileData.includes(',')) { alert('File data is corrupted.'); return; }
+try {
+const byteStr = atob(sub.fileData.split(',')[1]);
+const arr = new Uint8Array(byteStr.length);
+for (let i = 0; i < byteStr.length; i++) arr[i] = byteStr.charCodeAt(i);
+const blob = new Blob([arr], { type: 'application/zip' });
+const url = URL.createObjectURL(blob);
+const a = document.createElement('a');
+a.href = url;
+a.download = sub.fileName || (sub.studentName.replace(/\s+/g,'_') + '_submission.zip');
+a.click();
+URL.revokeObjectURL(url);
+} catch(e) { alert('Failed to download file: ' + e.message); }
+};
+
+window.downloadPDF = subId => {
+const sub = cache.subs[subId];
+const test = cache.tests[sub?.testId];
+if (!sub) return;
+const W=794,H=1123,canvas=document.createElement('canvas');
+canvas.width=W; canvas.height=H;
+const ctx=canvas.getContext('2d');
+ctx.fillStyle='#07080b'; ctx.fillRect(0,0,W,H);
+const g=ctx.createLinearGradient(0,0,W,0);
+g.addColorStop(0,'#4ade80'); g.addColorStop(1,'#22d3ee');
+ctx.fillStyle=g; ctx.fillRect(0,0,W,7);
+ctx.fillStyle='#0e1014'; rr(ctx,40,24,W-80,130,12); ctx.fill();
+ctx.strokeStyle='#262d3d'; ctx.lineWidth=1; ctx.stroke();
+ctx.fillStyle='#4ade80'; ctx.font='bold 11px monospace'; ctx.fillText("THEDAKSON'S_PLAYGROUND ©",64,52);
+ctx.fillStyle='#dde2ee'; ctx.font='bold 20px sans-serif'; ctx.fillText("DAKALO'S CODETEST",64,80);
+ctx.fillStyle='#505a72'; ctx.font='11px monospace'; ctx.fillText('Grade Report · '+(test?.title||'Assessment'),64,102);
+ctx.fillStyle='#8a94a8'; ctx.font='10px monospace'; ctx.fillText(new Date().toLocaleDateString('en-ZA',{year:'numeric',month:'long',day:'numeric'}),64,140);
+const sc=sub.grade?.score, sc_col=sc==null?'#505a72':sc>=70?'#4ade80':sc>=50?'#fbbf24':'#f87171';
+ctx.fillStyle=sc_col; ctx.font='bold 44px monospace'; ctx.textAlign='right';
+ctx.fillText(sc!=null?sc+'/100':'---',W-64,108); ctx.textAlign='left';
+let y=178;
+sh(ctx,'Student Information',40,y,W-80); y+=16;
+ro(ctx,'Name',sub.studentName,40,y,W-80); y+=36;
+ro(ctx,'Submitted',new Date(sub.submittedAt).toLocaleString(),40,y,W-80); y+=36;
+ro(ctx,'Time Used',Math.floor((sub.timeUsed||0)/60)+'m '+((sub.timeUsed||0)%60)+'s',40,y,W-80); y+=36;
+ro(ctx,'Mode',sub.submissionType==='editor'?'Code Editor':'File Upload',40,y,W-80); y+=50;
+sh(ctx,'Grade & Feedback',40,y,W-80); y+=16;
+if(sub.grade){
+ro(ctx,'Score',sub.grade.score+' / 100',40,y,W-80,sc_col); y+=36;
+if(sub.grade.feedback){
+ctx.fillStyle='#505a72'; ctx.font='9px monospace'; ctx.fillText('FEEDBACK',64,y+14); y+=26;
+ctx.fillStyle='#dde2ee'; ctx.font='13px sans-serif';
+wr(ctx,sub.grade.feedback,W-128).forEach(l=>{ctx.fillText(l,64,y);y+=22;});
+y+=8;
+}
+} else { ctx.fillStyle='#505a72'; ctx.font='13px sans-serif'; ctx.fillText('Not yet graded',64,y+20); y+=40; }
+y+=10; sh(ctx,'Submitted Code',40,y,W-80); y+=16;
+if(sub.code){
+const cl=sub.code.split('\n');
+ctx.fillStyle='#0e1014'; ctx.beginPath(); rr(ctx,40,y,W-80,Math.min(cl.length*18+30,400),8); ctx.fill();
+ctx.strokeStyle='#1e2330'; ctx.lineWidth=1; ctx.stroke();
+cl.slice(0,22).forEach((ln,i)=>{
+ctx.fillStyle='#2e3548'; ctx.font='10px monospace'; ctx.fillText(String(i+1).padStart(3),55,y+20+i*18);
+ctx.fillStyle='#8a94a8'; ctx.fillText(ln.substring(0,90),84,y+20+i*18);
+});
+if(cl.length>22){ctx.fillStyle='#505a72';ctx.font='10px monospace';ctx.fillText('... '+(cl.length-22)+' more lines',84,y+20+22*18);}
+} else { ctx.fillStyle='#505a72'; ctx.font='12px sans-serif'; ctx.fillText(sub.fileName?'File: '+sub.fileName:'No code',64,y+22); }
+ctx.fillStyle='#262d3d'; ctx.fillRect(0,H-48,W,1);
+ctx.fillStyle='#505a72'; ctx.font='9px monospace';
+ctx.fillText("THEDAKSON'S_PLAYGROUND © · DAKALO'S CODETEST · CONFIDENTIAL",40,H-20);
+const a=document.createElement('a');
+a.href=canvas.toDataURL('image/png');
+a.download='grade_'+sub.studentName.replace(/\s+/g,'_')+'_'+Date.now()+'.png';
+a.click();
+};
+
+function rr(c,x,y,w,h,r){c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.arcTo(x+w,y,x+w,y+r,r);c.lineTo(x+w,y+h-r);c.arcTo(x+w,y+h,x+w-r,y+h,r);c.lineTo(x+r,y+h);c.arcTo(x,y+h,x,y+h-r,r);c.lineTo(x,y+r);c.arcTo(x,y,x+r,y,r);c.closePath();}
+function sh(c,t,x,y,w){c.fillStyle='#1a1e28';c.fillRect(x,y,w,26);c.fillStyle='#505a72';c.font='8px monospace';c.fillText(t.toUpperCase(),x+20,y+17);}
+function ro(c,l,v,x,y,w,vc='#dde2ee'){c.fillStyle='#0e1014';c.fillRect(x,y,w,30);c.strokeStyle='#141720';c.lineWidth=1;c.strokeRect(x,y,w,30);c.fillStyle='#505a72';c.font='8px monospace';c.fillText(l.toUpperCase(),x+20,y+19);c.fillStyle=vc;c.font='12px sans-serif';c.textAlign='right';c.fillText(String(v),x+w-20,y+19);c.textAlign='left';}
+function wr(c,t,mw){const ws=t.split(' '),ls=[];let cur='';ws.forEach(w=>{const tx=cur?cur+' '+w:w;if(c.measureText(tx).width>mw){ls.push(cur);cur=w;}else cur=tx;});if(cur)ls.push(cur);return ls;}
+
+function renderStudentMessages() {
+const el = document.getElementById('student-messages-list');
+if (!el) return;
+const msgs = Object.values(cache.studentMessages).sort((a,b) => b.sentAt - a.sentAt);
+const unreadCount = msgs.filter(m => !m.read).length;
+const badge = document.getElementById('smsg-count-badge');
+if (badge) {
+badge.textContent = unreadCount > 0 ? `${unreadCount} unread` : `${msgs.length} total`;
+badge.style.color = unreadCount > 0 ? 'var(--pu)' : 'var(--td)';
+}
+const tabBtn = document.getElementById('tab-btn-student-messages');
+if (tabBtn) {
+const dot = tabBtn.querySelector('.smsg-unread-dot');
+if (unreadCount > 0 && !dot) {
+const d = document.createElement('span');
+d.className = 'smsg-unread-dot';
+tabBtn.insertBefore(d, tabBtn.firstChild);
+} else if (unreadCount === 0 && dot) {
+dot.remove();
+}
+}
+if (msgs.length === 0) {
+el.innerHTML = '<div class="empty">No student messages yet. Students can send up to 3 messages per day from the testTakers portal.</div>';
+return;
+}
+el.innerHTML = msgs.map(m => {
+const safeMsg = m.message.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,' ');
+const safeName = m.studentName.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+const hasReply = m.adminReply && m.adminReply.text;
+return `
+<div class="smsg-card ${m.read ? '' : 'unread'}">
+<div class="smsg-header">
+<div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+${!m.read ? '<span class="smsg-unread-dot"></span>' : ''}
+<span class="smsg-from">👤 ${esc(m.studentName)}</span>
+<span class="smsg-time">${new Date(m.sentAt).toLocaleString()}</span>
+</div>
+<div style="display:flex;gap:6px;align-items:center;flex-shrink:0">
+${!m.read ? `<button class="btn btn-g btn-sm" onclick="markMsgRead('${m.id}')">✓ Read</button>` : '<span style="font-family:var(--mono);font-size:9px;color:var(--tdd)">✓ read</span>'}
+<button class="btn btn-pu btn-sm" onclick="openReplyModal('${m.id}','${safeName}','${safeMsg}')">${hasReply ? '↩ Edit Reply' : '↩ Reply'}</button>
+<button class="cmt-del" onclick="deleteStudentMsg('${m.id}')" title="Delete">✕</button>
+</div>
+</div>
+<div class="smsg-msg">${esc(m.message)}</div>
+${hasReply ? `
+<div class="admin-reply-box">
+<div class="admin-reply-text">${esc(m.adminReply.text)}</div>
+<div class="admin-reply-time">Replied ${new Date(m.adminReply.repliedAt).toLocaleString()}</div>
+</div>` : ''}
+</div>`;
+}).join('');
+}
+window.markMsgRead = id => update(ref(db, `studentMessages/${id}`), { read: true });
+window.markAllMsgsRead = () => {
+Object.values(cache.studentMessages).filter(m => !m.read).forEach(m => update(ref(db, `studentMessages/${m.id}`), { read: true }));
+};
+window.deleteStudentMsg = id => { if (!confirm('Delete this message?')) return; remove(ref(db, `studentMessages/${id}`)); };
+
+window.openReplyModal = (msgId, studentName, originalMsg) => {
+document.getElementById('reply-msg-id').value = msgId;
+document.getElementById('reply-student-name').value = studentName;
+document.getElementById('reply-original-msg').textContent = originalMsg;
+document.getElementById('reply-modal-sub').innerHTML = `Private reply to <strong style="color:var(--pu)">${esc(studentName)}</strong>`;
+const existing = cache.studentMessages[msgId]?.adminReply?.text || '';
+document.getElementById('reply-text').value = existing;
+document.getElementById('reply-err').style.display = 'none';
+document.getElementById('reply-modal-bg').classList.add('show');
+if (!cache.studentMessages[msgId]?.read) { update(ref(db, `studentMessages/${msgId}`), { read: true }); }
+setTimeout(() => document.getElementById('reply-text').focus(), 80);
+};
+window.closeReplyModal = () => { document.getElementById('reply-modal-bg').classList.remove('show'); document.getElementById('reply-text').value = ''; };
+document.getElementById('reply-modal-bg').addEventListener('click', e => { if (e.target === document.getElementById('reply-modal-bg')) window.closeReplyModal(); });
+window.onReplyInput = () => { document.getElementById('reply-err').style.display = 'none'; };
+window.sendReply = () => {
+const msgId = document.getElementById('reply-msg-id').value;
+const replyText = document.getElementById('reply-text').value.trim();
+const studentName = document.getElementById('reply-student-name').value;
+if (!replyText) { document.getElementById('reply-err').style.display = 'flex'; return; }
+const btn = document.getElementById('reply-send-btn');
+btn.disabled = true;
+btn.innerHTML = '<div class="spin" style="border-top-color:#07080b"></div> Sending...';
+const adminReply = { text: replyText, repliedAt: Date.now() };
+update(ref(db, `studentMessages/${msgId}`), { adminReply, read: true })
+.then(() => {
+const cmtId = 'reply_' + msgId;
+return set(ref(db, `comments/${cmtId}`), { id: cmtId, to: studentName, message: `[Instructor Reply] ${replyText}`, sentAt: Date.now() });
+})
+.then(() => {
+btn.innerHTML = '✓ Reply Sent!';
+btn.style.background = 'var(--ac)';
+setTimeout(() => { window.closeReplyModal(); btn.disabled = false; btn.innerHTML = '📩 Send Reply'; btn.style.background = ''; }, 1200);
+})
+.catch(err => { console.error('Reply failed:', err); btn.disabled = false; btn.innerHTML = '📩 Send Reply'; alert('Failed to send reply. Check your internet connection.'); });
+};
+
+window.sendPoll = () => {
+const q = document.getElementById('poll-question').value.trim();
+if (!q) { alert('Please type a question.'); return; }
+const id = uid();
+set(ref(db, `polls/${id}`), { id, question: q, sentAt: Date.now(), active: true });
+document.getElementById('poll-question').value = '';
+};
+window.deletePoll = id => { if (!confirm('Delete this poll and all its responses?')) return; remove(ref(db, `polls/${id}`)); const allResps = Object.values(cache.pollResponses || {}).filter(r => r.pollId === id); allResps.forEach(r => remove(ref(db, `pollResponses/${r.id}`))); };
+window.closePoll = id => { update(ref(db, `polls/${id}`), { active: false }); };
+window.reopenPoll = id => { update(ref(db, `polls/${id}`), { active: true }); };
+function renderPolls() {
+const el = document.getElementById('polls-list');
+if (!el) return;
+const polls = Object.values(cache.polls).sort((a,b) => b.sentAt - a.sentAt);
+const allResps = Object.values(cache.pollResponses || {});
+if (polls.length === 0) { el.innerHTML = '<div class="empty">No polls sent yet.</div>'; return; }
+el.innerHTML = polls.map(p => {
+const resps = allResps.filter(r => r.pollId === p.id);
+const yesCount = resps.filter(r => r.answer === 'yes').length;
+const noCount = resps.filter(r => r.answer === 'no').length;
+const total = resps.length;
+const yesPct = total ? Math.round((yesCount/total)*100) : 0;
+const noPct = total ? Math.round((noCount/total)*100) : 0;
+const totalStudents = Object.keys(cache.students).length;
+const notAnswered = totalStudents - total;
+return `
+<div class="poll-card">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px">
+<div>
+<div style="font-family:var(--mono);font-size:9px;color:var(--cy);font-weight:700;letter-spacing:1px;margin-bottom:4px">
+${p.active ? '🟢 ACTIVE' : '⏸ CLOSED'} &nbsp;·&nbsp; ${new Date(p.sentAt).toLocaleString()}
+</div>
+<div class="poll-question">${esc(p.question)}</div>
+</div>
+<div style="display:flex;gap:6px;flex-shrink:0">
+${p.active ? `<button class="btn btn-d btn-sm" onclick="closePoll('${p.id}')">⏸ Close</button>` : `<button class="btn btn-s btn-sm" onclick="reopenPoll('${p.id}')">▶ Reopen</button>`}
+<button class="cmt-del" onclick="deletePoll('${p.id}')" title="Delete">✕</button>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+<div style="background:var(--s2);border:1px solid var(--b1);border-radius:var(--r);padding:10px 12px">
+<div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;margin-bottom:6px">
+<span style="color:var(--ac);font-weight:700">✅ YES</span>
+<span style="color:var(--ac);font-weight:700">${yesCount} (${yesPct}%)</span>
+</div>
+<div class="poll-bar-wrap"><div class="poll-bar-yes" style="width:${yesPct}%"></div></div>
+</div>
+<div style="background:var(--s2);border:1px solid var(--b1);border-radius:var(--r);padding:10px 12px">
+<div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;margin-bottom:6px">
+<span style="color:var(--er);font-weight:700">❌ NO</span>
+<span style="color:var(--er);font-weight:700">${noCount} (${noPct}%)</span>
+</div>
+<div class="poll-bar-wrap"><div class="poll-bar-no" style="width:${noPct}%"></div></div>
+</div>
+</div>
+<div style="font-family:var(--mono);font-size:9px;color:var(--td);margin-bottom:${total>0?'10px':'0'}">
+${total} of ${totalStudents} student${totalStudents!==1?'s':''} responded
+${notAnswered>0&&p.active?` · ${notAnswered} awaiting`:''}
+</div>
+${total > 0 ? `
+<div style="border-top:1px solid var(--b1);padding-top:10px">
+<div style="font-family:var(--mono);font-size:9px;color:var(--td);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Individual Responses</div>
+${resps.sort((a,b)=>a.studentName.localeCompare(b.studentName)).map(r => `
+<div class="poll-resp-row">
+<span style="flex:1">${esc(r.studentName)}</span>
+<span class="${r.answer==='yes'?'poll-yes-chip':'poll-no-chip'}">${r.answer==='yes'?'✅ YES':'❌ NO'}</span>
+<span style="font-family:var(--mono);font-size:9px;color:var(--tdd)">${new Date(r.answeredAt).toLocaleTimeString()}</span>
+</div>`).join('')}
+</div>` : ''}
+</div>`;
+}).join('');
+}
+
+function updateCommentTargets() {
+const sel = document.getElementById('cmt-target');
+if (!sel) return;
+const students = Object.values(cache.students);
+const current = sel.value;
+sel.innerHTML = '<option value="__all__">📢 Broadcast --- All Students</option>' + students.map(s => `<option value="${esc(s.name)}">${esc(s.name)}</option>`).join('');
+sel.value = current;
+}
+function renderComments() {
+updateCommentTargets();
+const el = document.getElementById('comments-list');
+if (!el) return;
+const cmts = Object.values(cache.comments).sort((a,b) => b.sentAt - a.sentAt);
+if (cmts.length === 0) { el.innerHTML = '<div class="empty">No comments sent yet.</div>'; return; }
+el.innerHTML = cmts.map(c => `
+<div class="cmt-card ${c.to === '__all__' ? 'broadcast' : 'private'}">
+<div class="cmt-header">
+<div>
+<span class="cmt-to ${c.to === '__all__' ? 'broadcast' : 'private'}">
+${c.to === '__all__' ? '📢 ALL STUDENTS' : '👤 ' + esc(c.to)}
+</span>
+<span class="cmt-time" style="margin-left:10px">${new Date(c.sentAt).toLocaleString()}</span>
+</div>
+<button class="cmt-del" onclick="deleteComment('${c.id}')" title="Delete">✕</button>
+</div>
+<div class="cmt-msg">${esc(c.message)}</div>
+</div>`).join('');
+}
+window.sendComment = () => {
+const target = document.getElementById('cmt-target').value;
+const msg = document.getElementById('cmt-text').value.trim();
+if (!msg) { alert('Please type a message.'); return; }
+const id = uid();
+const obj = { id, to: target, message: msg, sentAt: Date.now() };
+set(ref(db, `comments/${id}`), obj);
+document.getElementById('cmt-text').value = '';
+};
+window.deleteComment = id => { if (!confirm('Delete this comment?')) return; remove(ref(db, `comments/${id}`)); };
+</script>
+</body>
+</html>

@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>DAKALO'S CODETEST --- testTakers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#07080b;--s1:#0e1014;--s2:#141720;--s3:#1a1e28;
+--b1:#1e2330;--b2:#262d3d;--b3:#3a4257;
+--tx:#dde2ee;--tm:#8a94a8;--td:#505a72;--tdd:#2e3548;
+--ac:#4ade80;--acd:#166534;--acg:rgba(74,222,128,.12);
+--wa:#fbbf24;--wag:rgba(251,191,36,.11);
+--er:#f87171;--erg:rgba(248,113,113,.11);
+--bl:#60a5fa;--blg:rgba(96,165,250,.1);
+--cy:#22d3ee;--cyg:rgba(34,211,238,.1);
+--pu:#a78bfa;--pug:rgba(167,139,250,.1);
+--mono:'JetBrains Mono',monospace;
+--disp:'Syne',sans-serif;
+--r:7px;--rl:13px;--rxl:18px;
+}
+html,body{min-height:100vh;background:var(--bg);color:var(--tx);font-family:var(--disp)}
+body{background-image:radial-gradient(ellipse 900px 500px at 50% -100px,rgba(74,222,128,.07) 0%,transparent 65%),radial-gradient(ellipse 500px 300px at 10% 90%,rgba(96,165,250,.03) 0%,transparent 60%)}
+.screen{display:none}.screen.on{display:block}
+.sflex{display:none}.sflex.on{display:flex}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(7,8,11,.93);border-bottom:1px solid var(--b1);backdrop-filter:blur(16px)}
+.topbar .inner{max-width:1100px;margin:0 auto;padding:0 20px;height:58px;display:flex;align-items:center;gap:12px}
+.tb-logo{width:32px;height:32px;background:linear-gradient(135deg,var(--ac),#16a34a);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;box-shadow:0 0 16px rgba(74,222,128,.2)}
+.tb-site{font-family:var(--mono);font-size:9px;font-weight:700;color:var(--ac);letter-spacing:2px;line-height:1}
+.tb-title{font-size:14px;font-weight:800;letter-spacing:-.3px;line-height:1.2;margin-top:2px}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#screen-login{min-height:100vh;flex-direction:column;align-items:center;justify-content:center;padding:24px;background-image:radial-gradient(ellipse 700px 500px at 50% -60px,rgba(74,222,128,.09) 0%,transparent 60%)}
+.login-card{width:100%;max-width:420px;background:var(--s1);border:1px solid var(--b1);border-radius:var(--rxl);overflow:hidden;position:relative}
+.login-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--ac),transparent);opacity:.8}
+.login-hero{background:linear-gradient(135deg,rgba(74,222,128,.06),rgba(34,211,238,.04));border-bottom:1px solid var(--b1);padding:36px 32px;text-align:center}
+.login-logo-big{width:64px;height:64px;background:linear-gradient(135deg,var(--ac),#16a34a);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 18px;box-shadow:0 8px 32px rgba(74,222,128,.25)}
+.login-site-name{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--ac);letter-spacing:2.5px;margin-bottom:8px}
+.login-heading{font-size:26px;font-weight:800;letter-spacing:-.5px;margin-bottom:5px}
+.login-sub{font-size:12px;color:var(--td)}
+.login-form-wrap{padding:24px 28px}
+.page{max-width:1100px;margin:0 auto;padding:24px 20px}
+.page-narrow{max-width:760px;margin:0 auto;padding:24px 20px}
+.tabs{display:flex;gap:3px;padding:4px;background:var(--s2);border:1px solid var(--b1);border-radius:11px;margin-bottom:22px}
+.tab{flex:1;padding:8px 10px;border-radius:8px;border:none;background:transparent;cursor:pointer;font-family:var(--disp);font-size:11px;font-weight:700;color:var(--td);transition:all .18s;text-align:center;white-space:nowrap}
+.tab.on{background:var(--s3);color:var(--tx);border:1px solid var(--b2)}
+.tab-content{display:none}.tab-content.on{display:block}
+.card{background:var(--s1);border:1px solid var(--b1);border-radius:var(--rl);overflow:hidden;margin-bottom:14px}
+.card:last-child{margin-bottom:0}
+.card-hd{padding:12px 16px;border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:8px}
+.card-ico{width:20px;height:20px;background:var(--s2);border:1px solid var(--b1);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.card-lbl{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--td)}
+.card-body{padding:16px}
+.field{margin-bottom:12px}.field:last-child{margin-bottom:0}
+.lbl{display:block;font-family:var(--mono);font-size:9px;font-weight:600;color:var(--td);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:5px}
+.inp{width:100%;background:var(--s2);border:1px solid var(--b1);border-radius:var(--r);padding:9px 11px;font-family:var(--mono);font-size:13px;color:var(--tx);outline:none;transition:border-color .18s,box-shadow .18s;-webkit-appearance:none}
+.inp:focus{border-color:var(--ac);box-shadow:0 0 0 3px var(--acg)}
+.inp::placeholder{color:var(--tdd)}
+.btn{
+display:inline-flex;align-items:center;gap:6px;padding:9px 18px;
+border-radius:var(--r);font-family:var(--disp);font-size:12px;font-weight:700;
+cursor:pointer;border:none;
+transition:background .18s, transform .15s cubic-bezier(.34,1.56,.64,1),
+box-shadow .18s, opacity .18s, filter .18s;
+white-space:nowrap;position:relative;overflow:hidden;
+-webkit-tap-highlight-color:transparent;
+}
+.btn::after{content:'';position:absolute;inset:0;border-radius:inherit;background:rgba(255,255,255,.15);opacity:0;transition:opacity .2s;pointer-events:none;}
+.btn:active:not(:disabled)::after{opacity:1}
+.btn:active:not(:disabled){transform:translateY(1px) scale(.98)!important}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none!important;filter:grayscale(.4)}
+.btn-p{background:var(--ac);color:#07080b;box-shadow:0 2px 12px rgba(74,222,128,.2)}
+.btn-p:not(:disabled):hover{background:#6ee7a0;transform:translateY(-2px);box-shadow:0 6px 20px rgba(74,222,128,.35)}
+.btn-g{background:transparent;color:var(--tm);border:1px solid var(--b1)}
+.btn-g:not(:disabled):hover{color:var(--tx);border-color:var(--b2);background:rgba(255,255,255,.03)}
+.btn-bl{background:var(--bl);color:#07080b;box-shadow:0 2px 12px rgba(96,165,250,.2)}
+.btn-bl:not(:disabled):hover{background:#93c5fd;transform:translateY(-2px);box-shadow:0 6px 20px rgba(96,165,250,.3)}
+.btn-submitting{background:var(--wa)!important;color:#07080b!important;cursor:not-allowed;animation:pulse-submit 1s ease-in-out infinite;box-shadow:0 0 20px rgba(251,191,36,.3)!important}
+.btn-done{background:var(--ac)!important;color:#07080b!important;cursor:not-allowed;box-shadow:0 0 24px rgba(74,222,128,.4)!important}
+@keyframes pulse-submit{0%,100%{box-shadow:0 0 12px rgba(251,191,36,.3)}50%{box-shadow:0 0 24px rgba(251,191,36,.5)}}
+.btn-closed{background:var(--er)!important;color:#07080b!important;cursor:not-allowed!important;pointer-events:none;box-shadow:0 2px 12px rgba(248,113,113,.25)!important;filter:none!important;opacity:1!important;transition:background .3s, box-shadow .3s;}
+.sub-limit-label{margin-top:6px;font-family:var(--mono);font-size:10px;font-weight:700;color:var(--er);letter-spacing:.8px;text-transform:uppercase;text-align:center;animation:fadeUp .25s ease;}
+.btn-f{width:100%;justify-content:center}
+.btn-sm{padding:5px 10px;font-size:10px}
+.chip{font-family:var(--mono);font-size:10px;background:var(--s2);border:1px solid var(--b1);padding:3px 9px;border-radius:99px;color:var(--td);letter-spacing:.3px;white-space:nowrap}
+.chip-green{background:var(--acg);border-color:rgba(74,222,128,.25);color:var(--ac)}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:99px;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.5px}
+.badge-green{background:var(--acg);color:var(--ac);border:1px solid rgba(74,222,128,.25)}
+.badge-amber{background:var(--wag);color:var(--wa);border:1px solid rgba(251,191,36,.25)}
+.badge-red{background:var(--erg);color:var(--er);border:1px solid rgba(248,113,113,.25)}
+.badge-gray{background:var(--s2);color:var(--td);border:1px solid var(--b1)}
+.badge-pu{background:var(--pug);color:var(--pu);border:1px solid rgba(167,139,250,.25)}
+.badge-bl{background:var(--blg);color:var(--bl);border:1px solid rgba(96,165,250,.25)}
+.note{border-radius:var(--r);padding:10px 12px;font-size:11px;display:flex;align-items:center;gap:8px}
+.note-warn{background:var(--wag);border:1px solid rgba(251,191,36,.25);color:var(--wa)}
+.note-err{background:var(--erg);border:1px solid rgba(248,113,113,.25);color:var(--er)}
+.note-info{background:var(--blg);border:1px solid rgba(96,165,250,.25);color:var(--bl)}
+.note-ok{background:var(--acg);border:1px solid rgba(74,222,128,.25);color:var(--ac)}
+.tcard{border:1px solid rgba(74,222,128,.25);border-radius:var(--rl);padding:18px;margin-bottom:12px;background:rgba(74,222,128,.02);transition:border-color .18s,transform .18s}
+.tcard:hover{border-color:rgba(74,222,128,.4);transform:translateY(-1px)}
+.rcard{background:var(--s1);border:1px solid var(--b1);border-radius:var(--rl);overflow:hidden;margin-bottom:14px;transition:border-color .18s}
+.rcard:hover{border-color:var(--b2)}
+.rcard.graded{border-color:rgba(74,222,128,.2)}
+.rcard.pending{border-color:rgba(96,165,250,.15)}
+.rcard-hd{padding:14px 18px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.rcard-body{padding:16px 18px}
+.score-big{font-family:var(--mono);font-size:52px;font-weight:700;letter-spacing:-3px;line-height:1}
+.score-denom{font-size:22px;opacity:.4}
+.sbar-wrap{height:6px;background:var(--b2);border-radius:99px;overflow:hidden;margin-top:8px}
+.sbar{height:100%;border-radius:99px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.cprev{background:var(--s2);border:1px solid var(--b1);border-radius:var(--rl);overflow:hidden;margin-top:14px}
+.cprev-bar{background:var(--s3);border-bottom:1px solid var(--b1);padding:8px 14px;display:flex;align-items:center;gap:6px}
+.cdot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.cprev-fname{font-family:var(--mono);font-size:10px;color:var(--td);margin-left:4px}
+.cprev-body{display:flex;max-height:200px;overflow:hidden}
+.cprev-lines{padding:12px 8px;font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--tdd);text-align:right;border-right:1px solid var(--b1);background:var(--s3);user-select:none;min-width:36px;flex-shrink:0}
+.cprev-code{flex:1;padding:12px 14px;font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--tm);overflow:auto;white-space:pre;tab-size:2}
+.stat-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.stat-pill{background:var(--s2);border:1px solid var(--b1);border-radius:var(--r);padding:10px 14px;flex:1;min-width:100px}
+.stat-pill-l{font-family:var(--mono);font-size:9px;color:var(--td);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px}
+.stat-pill-v{font-family:var(--mono);font-size:18px;font-weight:700;letter-spacing:-1px}
+.sl{display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:start}
+@media(max-width:860px){.sl{grid-template-columns:1fr}}
+.sl-side{display:flex;flex-direction:column;gap:12px}
+.qbox{background:var(--s2);border:1px solid var(--b2);border-radius:var(--r);padding:14px 16px;font-family:var(--mono);font-size:12px;line-height:1.9;color:var(--tm);white-space:pre-wrap;overflow-wrap:break-word;max-height:400px;overflow-y:auto}
+.timer-stat{background:var(--s2);border:1px solid var(--b1);border-radius:var(--r);padding:10px 14px}
+.timer-lbl{font-family:var(--mono);font-size:9px;color:var(--td);letter-spacing:1.8px;text-transform:uppercase;margin-bottom:3px}
+.timer-val{font-family:var(--mono);font-size:20px;font-weight:700;letter-spacing:-1px}
+.tbar-wrap{height:3px;background:var(--b1);border-radius:99px;overflow:hidden;margin-top:6px}
+.tbar{height:100%;border-radius:99px;transition:width 1s linear,background .5s}
+.editor{background:var(--s1);border:1px solid var(--b1);border-radius:var(--rl);overflow:hidden}
+.ebar{background:var(--s3);border-bottom:1px solid var(--b1);padding:9px 14px;display:flex;align-items:center;gap:6px}
+.edot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.efname{font-family:var(--mono);font-size:10px;color:var(--td);margin-left:4px}
+.elang{margin-left:auto;font-family:var(--mono);font-size:9px;color:var(--tdd);background:var(--s1);border:1px solid var(--b1);padding:2px 7px;border-radius:4px}
+.ebody{display:flex;min-height:340px;max-height:560px}
+.elines{padding:13px 8px;font-family:var(--mono);font-size:11px;line-height:1.75;color:var(--tdd);text-align:right;border-right:1px solid var(--b1);background:var(--s3);user-select:none;min-width:40px;flex-shrink:0;overflow:hidden}
+.ecode{flex:1;padding:13px;font-family:var(--mono);font-size:12px;line-height:1.75;color:var(--tx);background:transparent;border:none;outline:none;resize:none;tab-size:2;caret-color:var(--ac);overflow-y:auto}
+.ecode::placeholder{color:var(--tdd)}
+.efooter{border-top:1px solid var(--b1);padding:8px 14px;background:var(--s3);font-family:var(--mono);font-size:10px;color:var(--td)}
+.upload-zone{background:var(--s2);border:1.5px dashed var(--b2);border-radius:var(--rl);padding:52px 24px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;min-height:240px}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--ac);background:var(--acg)}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.check-circle{width:64px;height:64px;border-radius:50%;background:var(--acg);border:2px solid var(--ac);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 18px;animation:pop .45s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.db-dot{width:7px;height:7px;border-radius:50%;background:var(--wa);display:inline-block;transition:background .3s}
+.db-dot.ok{background:var(--ac)}
+.hr{height:1px;background:var(--b1);margin:14px 0}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--b2);border-radius:3px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.fade{animation:fadeUp .25s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.fadein{animation:fadeIn .3s ease}
+@keyframes rot{to{transform:rotate(360deg)}}
+.expand-btn{background:var(--s2);border:1px solid var(--b1);border-radius:var(--r);padding:5px 12px;font-family:var(--mono);font-size:10px;color:var(--td);cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.expand-btn:hover{color:var(--tx);border-color:var(--b2)}
+.cmt-banner{border-radius:var(--rl);padding:16px 18px;margin-bottom:14px;position:relative;overflow:hidden;animation:slideDown .4s cubic-bezier(.34,1.2,.64,1)}
+@keyframes slideDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
+.cmt-banner.broadcast{background:rgba(251,191,36,.1);border:1.5px solid rgba(251,191,36,.4)}
+.cmt-banner.private{background:rgba(96,165,250,.1);border:1.5px solid rgba(96,165,250,.35)}
+.cmt-banner-label{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:7px;display:flex;align-items:center;gap:7px}
+.cmt-banner-label.broadcast{color:var(--wa)}
+.cmt-banner-label.private{color:var(--bl)}
+.cmt-banner-msg{font-size:14px;font-weight:700;color:var(--tx);line-height:1.65}
+.cmt-banner-time{font-family:var(--mono);font-size:9px;color:var(--tdd);margin-top:6px}
+.cmt-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.cmt-banner.broadcast::before{background:linear-gradient(90deg,transparent,var(--wa),transparent);opacity:.8}
+.cmt-banner.private::before{background:linear-gradient(90deg,transparent,var(--bl),transparent);opacity:.8}
+#comments-area{margin-bottom:0}
+.online-panel{background:var(--s1);border:1px solid var(--b1);border-radius:var(--rl);overflow:hidden;margin-bottom:14px}
+.online-panel-hd{padding:10px 14px;border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:8px;background:var(--s2)}
+.online-panel-title{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--td)}
+.online-tag{display:inline-flex;align-items:center;gap:5px;background:var(--s2);border:1px solid var(--b1);border-radius:99px;padding:3px 10px;font-family:var(--mono);font-size:10px;color:var(--tm);transition:background .15s}
+.online-tag.me{background:var(--acg);border-color:var(--acd);color:var(--ac);font-weight:700}
+.online-tag .dot{width:6px;height:6px;border-radius:50%;background:var(--ac);box-shadow:0 0 4px var(--ac);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.lb-wrap{background:var(--s1);border:1px solid var(--b1);border-radius:var(--rl);overflow:hidden;margin-bottom:14px}
+.lb-hd{padding:10px 14px;border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:8px;background:var(--s2)}
+.lb-row{display:grid;grid-template-columns:36px 1fr auto auto;gap:10px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--b1)}
+.lb-row:last-child{border-bottom:none}
+.lb-row.mine{background:rgba(74,222,128,.04);border-left:3px solid var(--ac)}
+.lb-rank{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--td);text-align:center}
+.rank-1{color:#fbbf24;font-size:16px}
+.rank-2{color:#94a3b8;font-size:15px}
+.rank-3{color:#cd7c4a;font-size:15px}
+.lb-name{font-size:13px;font-weight:600}
+.lb-score{font-family:var(--mono);font-size:15px;font-weight:700}
+.poll-banner{border-radius:var(--rl);padding:18px 20px;margin-bottom:14px;position:relative;overflow:hidden;animation:slideDown .4s cubic-bezier(.34,1.2,.64,1);border:1.5px solid rgba(34,211,238,.4);background:rgba(34,211,238,.06)}
+.poll-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cy),transparent);opacity:.9}
+.poll-banner-label{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--cy);margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.poll-banner-q{font-size:15px;font-weight:700;color:var(--tx);line-height:1.6;margin-bottom:14px}
+.poll-btn-row{display:flex;gap:10px}
+.poll-btn-yes{flex:1;padding:12px;border-radius:var(--r);border:2px solid var(--acd);background:var(--acg);color:var(--ac);font-family:var(--disp);font-size:14px;font-weight:800;cursor:pointer;transition:all .18s;text-align:center}
+.poll-btn-yes:hover{background:var(--ac);color:#07080b;transform:translateY(-1px)}
+.poll-btn-yes.selected{background:var(--ac);color:#07080b;transform:none}
+.poll-btn-no{flex:1;padding:12px;border-radius:var(--r);border:2px solid rgba(248,113,113,.25);background:var(--erg);color:var(--er);font-family:var(--disp);font-size:14px;font-weight:800;cursor:pointer;transition:all .18s;text-align:center}
+.poll-btn-no:hover{background:var(--er);color:#07080b;transform:translateY(-1px)}
+.poll-btn-no.selected{background:var(--er);color:#07080b;transform:none}
+.poll-answered{font-family:var(--mono);font-size:11px;color:var(--td);margin-top:10px;text-align:center}
+.poll-change-btn{background:transparent;border:1px solid var(--b2);border-radius:var(--r);padding:4px 12px;font-family:var(--mono);font-size:10px;color:var(--td);cursor:pointer;margin-top:8px;transition:all .15s}
+.poll-change-btn:hover{color:var(--tx);border-color:var(--b3)}
+.msg-panel{background:var(--s1);border:1px solid var(--b1);border-radius:var(--rl);overflow:hidden;margin-bottom:14px;animation:fadeUp .3s ease;}
+.msg-panel-hd{padding:10px 16px;border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:8px;background:var(--s2);}
+.msg-panel-title{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--td);}
+.msg-quota{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--td);}
+.msg-quota.warn{color:var(--wa)}
+.msg-quota.full{color:var(--er)}
+.msg-body{padding:14px 16px}
+.msg-history{margin-bottom:12px;display:flex;flex-direction:column;gap:8px;max-height:160px;overflow-y:auto}
+.msg-bubble{background:var(--s2);border:1px solid var(--b1);border-radius:var(--r);padding:9px 13px;font-size:12px;color:var(--tm);line-height:1.6;position:relative;animation:fadeUp .2s ease;}
+.msg-bubble-time{font-family:var(--mono);font-size:9px;color:var(--tdd);margin-top:4px;}
+.msg-input-wrap{display:flex;gap:8px;align-items:flex-end}
+.msg-input-wrap textarea{flex:1;min-height:60px;max-height:120px;resize:vertical}
+.msg-send-btn{flex-shrink:0;align-self:flex-end}
+.msg-limit-bar{height:3px;background:var(--b2);border-radius:99px;overflow:hidden;margin-top:8px;}
+.msg-limit-fill{height:100%;border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1), background .4s;}
+</style>
+</head>
+<body>
+<!-- LOGIN SCREEN -->
+<div id="screen-login" class="sflex on">
+<div class="login-card">
+<div class="login-hero">
+<div class="login-logo-big">🎓</div>
+<div class="login-site-name">THEDAKSON'S_PLAYGROUND ©</div>
+<div class="login-heading">DAKALO'S CODETEST</div>
+<div class="login-sub">testTakers Portal --- Enter your name to begin</div>
+</div>
+<div class="login-form-wrap">
+<div id="db-notice" style="margin-bottom:12px;font-family:var(--mono);font-size:10px;color:var(--td);display:flex;align-items:center;gap:6px">
+<span class="db-dot" id="db-dot2"></span><span id="db-txt2">Connecting to database...</span>
+</div>
+<div id="no-test-notice" class="note note-warn" style="margin-bottom:14px;display:none">
+⏸ No tests are open right now. Wait for your instructor.
+</div>
+<div class="field">
+<label class="lbl" for="name-inp">Your Full Name</label>
+<input class="inp" id="name-inp" type="text" placeholder="e.g. Thabo Nkosi" autocomplete="name" style="font-size:14px;padding:11px 13px"/>
+</div>
+<div id="name-err" class="note note-err" style="display:none;margin-bottom:10px">⚠ Please enter your full name.</div>
+<button class="btn btn-p btn-f" style="padding:11px;font-size:13px" onclick="doLogin()">Enter testTakers Portal →</button>
+<div style="text-align:center;margin-top:16px;font-family:var(--mono);font-size:9px;color:var(--tdd);letter-spacing:.5px">
+THEDAKSON'S_PLAYGROUND © --- testTakers Portal
+</div>
+</div>
+</div>
+</div>
+<!-- LOBBY SCREEN -->
+<div id="screen-lobby" class="screen">
+<div class="topbar">
+<div class="inner">
+<div class="tb-logo">⌨</div>
+<div><div class="tb-site">THEDAKSON'S_PLAYGROUND ©</div><div class="tb-title">DAKALO'S CODETEST</div></div>
+<span class="chip" style="margin-left:4px">testTakers</span>
+<div class="tb-right">
+<span style="font-family:var(--mono);font-size:10px;color:var(--td)"><span class="db-dot ok"></span> Live</span>
+<span class="chip chip-green" id="lobby-name-chip"></span>
+<button class="btn btn-g btn-sm" onclick="signOut()">Sign out</button>
+</div>
+</div>
+</div>
+<div class="page-narrow">
+<div style="margin-bottom:20px">
+<div id="lobby-greeting" style="font-size:22px;font-weight:800;margin-bottom:3px"></div>
+<div id="lobby-greeting-sub" style="font-size:13px;color:var(--td)"></div>
+</div>
+<div id="polls-area"></div>
+<div id="comments-area"></div>
+<div class="msg-panel" id="msg-panel">
+<div class="msg-panel-hd">
+<span style="font-size:11px">✉️</span>
+<span class="msg-panel-title">Message Instructor</span>
+<span class="msg-quota" id="msg-quota">3 messages left today</span>
+</div>
+<div class="msg-body">
+<div class="msg-history" id="msg-history" style="display:none"></div>
+<div id="msg-input-area">
+<div class="msg-input-wrap">
+<textarea class="inp" id="msg-text" placeholder="Ask your instructor a question..." rows="2" maxlength="500" oninput="onMsgInput()"></textarea>
+<button class="btn btn-bl msg-send-btn" id="msg-send-btn" onclick="sendStudentMessage()" disabled>Send</button>
+</div>
+<div class="msg-limit-bar" style="margin-top:6px">
+<div class="msg-limit-fill" id="msg-limit-fill" style="width:0%;background:var(--ac)"></div>
+</div>
+<div id="msg-warn" style="display:none;margin-top:6px;font-family:var(--mono);font-size:10px;color:var(--er)">
+⛔ Daily message limit reached (3/3). Come back tomorrow.
+</div>
+</div>
+</div>
+</div>
+<div class="tabs">
+<button class="tab on" data-tab="tests" onclick="switchLobbyTab(this)">📋 Open Tests</button>
+<button class="tab" data-tab="results" onclick="switchLobbyTab(this)">🏆 My Results</button>
+</div>
+<div class="tab-content on" id="lobby-tab-tests">
+<div class="online-panel" id="online-panel">
+<div class="online-panel-hd">
+<span style="font-size:11px">🟢</span>
+<span class="online-panel-title">Students Online</span>
+<span id="online-count-badge" style="font-family:var(--mono);font-size:10px;color:var(--ac);margin-left:4px"></span>
+</div>
+<div id="online-tags-wrap" style="padding:10px 14px;display:flex;flex-wrap:wrap;gap:8px">
+<span style="font-family:var(--mono);font-size:11px;color:var(--tdd)">Loading...</span>
+</div>
+</div>
+<div id="lobby-tests"></div>
+</div>
+<div class="tab-content" id="lobby-tab-results">
+<div id="leaderboard-wrap" style="display:none">
+<div class="lb-wrap">
+<div class="lb-hd">
+<span style="font-size:11px">🏆</span>
+<span style="font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--td)">Class Leaderboard</span>
+<span style="font-family:var(--mono);font-size:9px;color:var(--tdd);margin-left:6px">Public grades only</span>
+</div>
+<div id="leaderboard-rows"></div>
+</div>
+</div>
+<div id="my-results-content"></div>
+</div>
+</div>
+</div>
+<!-- TESTING SCREEN -->
+<div id="screen-testing" class="screen">
+<div class="topbar">
+<div class="inner">
+<div class="tb-logo">⌨</div>
+<div><div class="tb-site">THEDAKSON'S_PLAYGROUND ©</div><div class="tb-title">DAKALO'S CODETEST</div></div>
+<div class="tb-right">
+<div class="timer-stat" style="padding:6px 12px">
+<div class="timer-lbl">Time Left</div>
+<div class="timer-val" id="timer-display">00:00</div>
+<div class="tbar-wrap"><div class="tbar" id="timer-bar" style="width:100%"></div></div>
+</div>
+<span class="chip" id="test-name-chip"></span>
+<button class="btn btn-g btn-sm" onclick="confirmExit()">Exit</button>
+</div>
+</div>
+</div>
+<div class="page">
+<div class="sl">
+<div class="sl-side">
+<div class="card">
+<div class="card-hd"><div class="card-ico">📋</div><span class="card-lbl" id="q-title-lbl">Question</span></div>
+<div class="card-body">
+<div id="q-desc" style="font-size:12px;color:var(--tm);margin-bottom:12px;display:none"></div>
+<div class="qbox" id="q-text"></div>
+<div id="q-lang" style="margin-top:10px;font-family:var(--mono);font-size:10px;color:var(--td)"></div>
+</div>
+</div>
+<div id="lines-stat" style="display:none">
+<div class="timer-stat">
+<div class="timer-lbl">Lines Written</div>
+<div class="timer-val" id="lines-val" style="color:var(--ac)">1</div>
+</div>
+</div>
+<button class="btn btn-p btn-f" id="submit-btn" style="padding:11px;font-size:13px" onclick="doSubmit(false)">✓ Submit Answer</button>
+</div>
+<div id="submission-area"></div>
+</div>
+</div>
+</div>
+<!-- SUBMITTED SCREEN -->
+<div id="screen-submitted" class="screen">
+<div class="topbar">
+<div class="inner">
+<div class="tb-logo">⌨</div>
+<div><div class="tb-site">THEDAKSON'S_PLAYGROUND ©</div><div class="tb-title">DAKALO'S CODETEST</div></div>
+<div class="tb-right">
+<span class="chip chip-green" id="sub-name-chip"></span>
+<button class="btn btn-g btn-sm" onclick="signOut()">Sign out</button>
+</div>
+</div>
+</div>
+<div class="page" style="max-width:640px;margin:0 auto">
+<div class="card fade" style="text-align:center;padding:40px 28px;position:relative;overflow:hidden">
+<div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--ac),transparent);opacity:.7"></div>
+<div class="check-circle">✓</div>
+<div style="font-size:22px;font-weight:800;margin-bottom:6px">Test Submitted!</div>
+<div id="sub-msg" style="font-size:13px;color:var(--td);margin-bottom:24px"></div>
+<div id="sub-stats" style="display:inline-flex;gap:20px;padding:14px 22px;background:var(--s2);border-radius:var(--r);border:1px solid var(--b1);margin-bottom:24px;flex-wrap:wrap;justify-content:center"></div>
+<div id="grade-area" style="margin-bottom:20px"></div>
+<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px">
+<button class="btn btn-g" onclick="goLobby()">← Back to Tests</button>
+<button class="btn btn-bl" onclick="goResults()">🏆 View All My Results</button>
+</div>
+</div>
+</div>
+</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, get, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyBG0WAk7sbSIrbZSUkDo-lZeUbXTsJIsiA",
+authDomain: "dakalo-codetest.firebaseapp.com",
+databaseURL: "https://dakalo-codetest-default-rtdb.firebaseio.com",
+projectId: "dakalo-codetest",
+storageBucket: "dakalo-codetest.firebasestorage.app",
+messagingSenderId: "95189384336",
+appId: "1:95189384336:web:c87d8e7f93c35cb0972c15",
+measurementId: "G-LGR6LXNCYY"
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+onValue(ref(db,'.info/connected'), snap => {
+const ok = snap.val();
+document.getElementById('db-dot2').className = 'db-dot '+(ok?'ok':'');
+document.getElementById('db-txt2').textContent = ok ? 'Database connected ✓' : 'Reconnecting...';
+if (ok) checkOpenTests();
+});
+
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const fmt = s => String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+const langExt = l => ({python:'py',javascript:'js',java:'java',c:'c',cpp:'cpp'}[l]||'txt');
+const uid = () => 'id_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+const sLabel = s => s==null?'PENDING':s>=70?'PASS':s>=50?'REVIEW':'FAIL';
+const sBadge = s => s==null?'badge-gray':s>=70?'badge-green':s>=50?'badge-amber':'badge-red';
+const sCol = s => s==null?'var(--td)':s>=70?'var(--ac)':s>=50?'var(--wa)':'var(--er)';
+const pctColor = p => p>=70?'var(--ac)':p>=50?'var(--wa)':'var(--er)';
+
+let myName = '';
+let activeTest = null;
+let timeLeft = 0, totalTime = 0;
+let timerInt = null;
+let currentSubId = null;
+let selectedFile = null;
+let testsCache = {};
+let subsCache = {};
+let gradeUnsub = null;
+let subsUnsub = null;
+let testsUnsub = null;
+let presenceUnsub = null;
+let commentsUnsub = null;
+let pollsUnsub = null;
+let pollRespUnsub = null;
+let msgsUnsub = null;
+let fileBase64 = null;
+let sessionStartedAt = null;
+let isSubmitting = false;
+let allSubsCache = {};
+let myPollResponses = {};
+let pollsCache = {};
+let presenceInt = null;
+const PRESENCE_INTERVAL = 30000;
+
+function show(id) {
+document.querySelectorAll('.screen, .sflex').forEach(el => el.classList.remove('on'));
+const target = document.getElementById('screen-' + id);
+if (target) target.classList.add('on');
+window.scrollTo(0, 0);
+}
+
+function startPresence(activity) {
+if (!myName) return;
+const key = myName.replace(/[.#$[\]/]/g, '_');
+const updatePresence = () => { set(ref(db, `presence/${key}`), { name: myName, lastSeen: Date.now(), activity: activity || 'Browsing' }); };
+updatePresence();
+clearInterval(presenceInt);
+presenceInt = setInterval(updatePresence, PRESENCE_INTERVAL);
+}
+function stopPresence() { clearInterval(presenceInt); if (!myName) return; const key = myName.replace(/[.#$[\]/]/g, '_'); remove(ref(db, `presence/${key}`)); }
+
+function renderOnlineStudents(presence) {
+const now = Date.now();
+const THRESHOLD = 2 * 60 * 1000;
+const online = Object.values(presence || {}).filter(p => (now - p.lastSeen) < THRESHOLD);
+const wrap = document.getElementById('online-tags-wrap');
+const badge = document.getElementById('online-count-badge');
+if (!wrap) return;
+badge.textContent = `(${online.length})`;
+if (online.length === 0) { wrap.innerHTML = '<span style="font-family:var(--mono);font-size:11px;color:var(--tdd)">No one online yet.</span>'; return; }
+wrap.innerHTML = online.map(p => `<span class="online-tag ${p.name === myName ? 'me' : ''}"><span class="dot"></span>${esc(p.name)}${p.name === myName ? ' (you)' : ''}</span>`).join('');
+}
+
+function renderLeaderboard(subs) {
+const lbWrap = document.getElementById('leaderboard-wrap');
+const lbRows = document.getElementById('leaderboard-rows');
+if (!lbWrap || !lbRows) return;
+const publicGrades = Object.values(subs).filter(s => s.grade?.score != null && s.grade?.visibility === 'public').sort((a, b) => b.grade.score - a.grade.score);
+if (publicGrades.length === 0) { lbWrap.style.display = 'none'; return; }
+lbWrap.style.display = 'block';
+const rankEmoji = (i) => i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i+1}`;
+const rankClass = (i) => i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : '';
+lbRows.innerHTML = publicGrades.map((sub, i) => { const isMe = sub.studentName === myName; return `<div class="lb-row ${isMe ? 'mine' : ''}"><div class="lb-rank ${rankClass(i)}">${rankEmoji(i)}</div><div><div class="lb-name">${esc(sub.studentName)}${isMe ? ' <span style="font-family:var(--mono);font-size:9px;color:var(--ac)">(you)</span>' : ''}</div><div style="font-family:var(--mono);font-size:9px;color:var(--tdd)">${sub.grade.visibility === 'public' ? '🌍 Public' : ''}</div></div><div class="lb-score" style="color:${sCol(sub.grade.score)}">${sub.grade.score}</div><div><span style="font-family:var(--mono);font-size:9px;color:var(--td)">/100</span></div></div>`; }).join('');
+}
+
+async function checkForActiveSession() {
+try {
+const snap = await get(ref(db, 'activeSessions'));
+const sessions = snap.val() || {};
+const myKey = myName.replace(/[.#$[\]/]/g,'_');
+const mySession = Object.entries(sessions).find(([k]) => k.startsWith(myKey + '_'));
+if (!mySession) return;
+const [sessionKey, session] = mySession;
+if (!session || !session.testId || !session.startedAt) return;
+const testSnap = await get(ref(db, 'tests/' + session.testId));
+const test = testSnap.val();
+if (!test || !test.isOpen) { remove(ref(db, 'activeSessions/' + sessionKey)); return; }
+const elapsed = Math.floor((Date.now() - session.startedAt) / 1000);
+const remaining = test.duration - elapsed;
+if (remaining <= 0) {
+activeTest = test; totalTime = test.duration; timeLeft = 0; sessionStartedAt = session.startedAt;
+remove(ref(db, 'activeSessions/' + sessionKey));
+const id = uid();
+const sub = { id, studentName: myName, testId: test.id, submittedAt: Date.now(), timeUsed: test.duration, submissionType: test.submissionType || 'editor', code: null, fileName: null, fileData: null, autoSubmit: true, grade: null };
+await set(ref(db, 'submissions/' + id), sub);
+subsCache[id] = sub; currentSubId = id; sessionStartedAt = null; activeTest = null;
+return;
+}
+activeTest = test; totalTime = test.duration; timeLeft = remaining; sessionStartedAt = session.startedAt;
+buildTestScreen(test); show('testing'); startPresence('Taking test: ' + (test.title||'')); startTimer();
+} catch(e) { console.warn('Session check failed', e); }
+}
+
+function checkOpenTests() { get(ref(db,'tests')).then(snap => { const tests = snap.val()||{}; const hasOpen = Object.values(tests).some(t=>t.isOpen); document.getElementById('no-test-notice').style.display = hasOpen?'none':'flex'; }); }
+checkOpenTests();
+document.getElementById('name-inp').addEventListener('keydown', e => { if(e.key==='Enter') window.doLogin(); });
+function normalizeName(raw) { return raw.trim().toLowerCase().replace(/\b\w/g, c => c.toUpperCase()); }
+window.doLogin = () => {
+const raw = document.getElementById('name-inp').value.trim();
+const err = document.getElementById('name-err');
+if (!raw) { err.style.display='flex'; return; }
+err.style.display='none';
+myName = normalizeName(raw);
+document.getElementById('name-inp').value = myName;
+const key = myName.replace(/[.#$[\]/]/g,'_');
+const studentsRef = ref(db, `students/${key}`);
+get(studentsRef).then(snap => { if (!snap.exists()) { set(studentsRef, { name: myName, registeredAt: Date.now() }); } });
+startPresence('Browsing');
+checkForActiveSession().then(() => showLobby());
+};
+window.signOut = () => {
+isSubmitting = false; stopPresence(); clearInterval(timerInt); clearInterval(presenceInt);
+if (gradeUnsub) { gradeUnsub(); gradeUnsub = null; }
+if (subsUnsub) { subsUnsub(); subsUnsub = null; }
+if (testsUnsub) { testsUnsub(); testsUnsub = null; }
+if (presenceUnsub) { presenceUnsub(); presenceUnsub = null; }
+if (commentsUnsub) { commentsUnsub(); commentsUnsub = null; }
+if (pollsUnsub) { pollsUnsub(); pollsUnsub = null; }
+if (pollRespUnsub) { pollRespUnsub(); pollRespUnsub = null; }
+if (msgsUnsub) { msgsUnsub(); msgsUnsub = null; }
+myName=''; activeTest=null; currentSubId=null; selectedFile=null; fileBase64=null;
+testsCache={}; subsCache={}; allSubsCache={}; pollsCache={}; myPollResponses={};
+document.getElementById('name-inp').value='';
+checkOpenTests();
+show('login');
+};
+window.switchLobbyTab = btn => {
+document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('on'));
+btn.classList.add('on');
+document.getElementById('lobby-tab-'+btn.dataset.tab).classList.add('on');
+if (btn.dataset.tab === 'results') renderMyResults();
+};
+
+function showLobby(openResultsTab) {
+clearInterval(timerInt);
+if (gradeUnsub) { gradeUnsub(); gradeUnsub = null; }
+if (testsUnsub) { testsUnsub(); testsUnsub = null; }
+if (subsUnsub) { subsUnsub(); subsUnsub = null; }
+if (presenceUnsub) { presenceUnsub(); presenceUnsub = null; }
+if (commentsUnsub) { commentsUnsub(); commentsUnsub = null; }
+if (pollsUnsub) { pollsUnsub(); pollsUnsub = null; }
+if (pollRespUnsub) { pollRespUnsub(); pollRespUnsub = null; }
+if (msgsUnsub) { msgsUnsub(); msgsUnsub = null; }
+document.getElementById('lobby-name-chip').textContent = myName;
+document.getElementById('lobby-greeting').textContent = `Welcome, ${myName} 👋`;
+testsUnsub = onValue(ref(db,'tests'), snap => { testsCache = snap.val()||{}; renderLobbyTests(testsCache); updateGreetingSub(); });
+subsUnsub = onValue(ref(db,'submissions'), snap => { const all = snap.val()||{}; allSubsCache = all; subsCache = {}; Object.values(all).forEach(s => { if(s.studentName===myName) subsCache[s.id]=s; }); updateGreetingSub(); renderLeaderboard(allSubsCache); renderLobbyTests(testsCache); const resultsTab = document.getElementById('lobby-tab-results'); if (resultsTab && resultsTab.classList.contains('on')) renderMyResults(); });
+presenceUnsub = onValue(ref(db,'presence'), snap => { renderOnlineStudents(snap.val()||{}); });
+commentsUnsub = onValue(ref(db,'comments'), snap => { renderComments(snap.val()||{}); });
+pollsUnsub = onValue(ref(db,'polls'), snap => { renderPolls(snap.val()||{}); });
+pollRespUnsub = onValue(ref(db,'pollResponses'), snap => { const all = snap.val()||{}; myPollResponses = {}; Object.values(all).forEach(r => { if(r.studentName===myName) myPollResponses[r.pollId]=r; }); renderPolls(); });
+msgsUnsub = onValue(ref(db,'studentMessages'), snap => { if (typeof loadSentMessages === 'function') loadSentMessages(); });
+show('lobby');
+initMessaging();
+if (openResultsTab) {
+document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('on'));
+document.querySelector('[data-tab=results]').classList.add('on');
+document.getElementById('lobby-tab-results').classList.add('on');
+renderMyResults();
+}
+}
+
+function updateGreetingSub() {
+const mySubs = Object.values(subsCache);
+const graded = mySubs.filter(s=>s.grade?.score!=null).length;
+const openCount = Object.values(testsCache).filter(t=>t.isOpen).length;
+let sub = '';
+if (graded > 0) { const avg = Math.round(mySubs.filter(s=>s.grade?.score!=null).reduce((a,s)=>a+s.grade.score,0)/graded); sub = `${mySubs.length} test${mySubs.length!==1?'s':''} submitted · ${graded} graded · avg score ${avg}%`; }
+else if (mySubs.length > 0) { sub = `${mySubs.length} test${mySubs.length!==1?'s':''} submitted · awaiting grades`; }
+else { sub = openCount > 0 ? `${openCount} test${openCount!==1?'s':''} available --- select one to begin` : 'No tests open yet --- check back soon'; }
+document.getElementById('lobby-greeting-sub').textContent = sub;
+}
+
+function renderLobbyTests(tests) {
+const openTests = Object.values(tests).filter(t => t.isOpen);
+const el = document.getElementById('lobby-tests');
+if (!el) return;
+if (openTests.length === 0) { el.innerHTML = `<div class="card"><div class="card-body" style="text-align:center;padding:48px 24px"><div style="font-size:32px;margin-bottom:14px">⏸</div><div style="font-weight:700;font-size:15px;margin-bottom:6px">No tests open right now</div><div style="font-size:12px;color:var(--td)">Your instructor hasn't opened any tests yet.<br>This page updates live --- no need to refresh.</div></div></div>`; return; }
+el.innerHTML = openTests.map(t => {
+const myTestSubs = Object.values(subsCache).filter(s => s.testId === t.id && s.studentName === myName);
+const max = t.maxSubmissions || 1;
+const used = myTestSubs.length;
+const limitReached = used >= max;
+let attemptInfoHtml = '';
+if (used === 0) attemptInfoHtml = '';
+else if (limitReached) attemptInfoHtml = `<div style="margin-top:8px;font-family:var(--mono);font-size:10px;color:var(--er);font-weight:700">⛔ All ${max} attempt${max !== 1 ? 's' : ''} used</div>`;
+else attemptInfoHtml = `<div style="margin-top:8px;font-family:var(--mono);font-size:10px;color:var(--wa)">✓ ${used}/${max} attempt${max !== 1 ? 's' : ''} used --- ${max - used} remaining</div>`;
+let actionHtml = '';
+if (limitReached) { actionHtml = `<div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:0"><button class="btn btn-closed" disabled aria-disabled="true" title="You have used all ${max} submission${max !== 1 ? 's' : ''} for this test" style="flex-shrink:0;min-width:120px;justify-content:center">⛔ Closed</button><div class="sub-limit-label">OUT OF SUBMISSIONS</div></div>`; }
+else if (used > 0) { actionHtml = `<button class="btn btn-p" style="flex-shrink:0" onclick="startTest('${t.id}')">↺ Retake (${used}/${max}) →</button>`; }
+else { actionHtml = `<button class="btn btn-p" style="flex-shrink:0" onclick="startTest('${t.id}')">Start Test →</button>`; }
+return `<div class="tcard fade"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap"><div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;flex-wrap:wrap"><div style="font-size:16px;font-weight:800">${esc(t.title)}</div><span class="badge badge-green">OPEN</span>${t.language ? `<span class="badge badge-pu">${t.language.toUpperCase()}</span>` : ''}</div><div style="font-family:var(--mono);font-size:10px;color:var(--td)">⏱ ${fmt(t.duration)} &nbsp;·&nbsp; ${t.submissionType === 'editor' ? 'Code Editor' : 'ZIP Upload'} &nbsp;·&nbsp; ${max} attempt${max !== 1 ? 's' : ''} allowed</div>${t.description ? `<div style="font-size:12px;color:var(--tm);margin-top:8px;line-height:1.6">${esc(t.description)}</div>` : ''}${attemptInfoHtml}</div>${actionHtml}</div></div>`;
+}).join('');
+}
+
+function renderMyResults() {
+const el = document.getElementById('my-results-content');
+const mySubs = Object.values(subsCache).sort((a,b)=>b.submittedAt-a.submittedAt);
+if (mySubs.length===0) { el.innerHTML=`<div class="card"><div class="card-body" style="text-align:center;padding:48px 24px"><div style="font-size:36px;margin-bottom:14px">📭</div><div style="font-weight:700;font-size:15px;margin-bottom:6px">No results yet</div><div style="font-size:12px;color:var(--td)">Your results will appear here after you submit a test.</div></div></div>`; return; }
+const graded = mySubs.filter(s=>s.grade?.score!=null);
+const avg = graded.length ? Math.round(graded.reduce((a,s)=>a+s.grade.score,0)/graded.length) : null;
+const best = graded.length ? Math.max(...graded.map(s=>s.grade.score)) : null;
+const passes = graded.filter(s=>s.grade.score>=70).length;
+let summaryHtml = `<div class="stat-row"><div class="stat-pill"><div class="stat-pill-l">Tests Taken</div><div class="stat-pill-v" style="color:var(--bl)">${mySubs.length}</div></div><div class="stat-pill"><div class="stat-pill-l">Graded</div><div class="stat-pill-v" style="color:var(--cy)">${graded.length}</div></div>${avg!=null?`<div class="stat-pill"><div class="stat-pill-l">Avg Score</div><div class="stat-pill-v" style="color:${pctColor(avg)}">${avg}%</div></div>`:''}${best!=null?`<div class="stat-pill"><div class="stat-pill-l">Best Score</div><div class="stat-pill-v" style="color:${pctColor(best)}">${best}%</div></div>`:''}${graded.length?`<div class="stat-pill"><div class="stat-pill-l">Passes</div><div class="stat-pill-v" style="color:var(--ac)">${passes}/${graded.length}</div></div>`:''}</div>`;
+const cardsHtml = mySubs.map(sub => { const test = testsCache[sub.testId]; const grade = sub.grade; const cLines = (sub.code||'').split('\n'); const isGraded = grade?.score != null; const expandId = 'expand_'+sub.id; return `<div class="rcard ${isGraded?'graded':'pending'} fadein"><div class="rcard-hd"><div><div style="font-size:15px;font-weight:800;margin-bottom:3px">${esc(test?.title||'Unknown Test')}</div>${(()=>{ const testMax = testsCache[sub.testId]?.maxSubmissions||1; const allForTest = Object.values(subsCache).filter(s=>s.testId===sub.testId).sort((a,b)=>a.submittedAt-b.submittedAt); const attemptNum = allForTest.findIndex(s=>s.id===sub.id)+1; return testMax>1?`<div style="font-family:var(--mono);font-size:9px;color:var(--pu);margin-bottom:2px;font-weight:700">ATTEMPT ${attemptNum} OF ${testMax}</div>`:''; })()}<div style="font-family:var(--mono);font-size:10px;color:var(--td)">Submitted ${new Date(sub.submittedAt).toLocaleString()} &nbsp;·&nbsp; ${fmt(sub.timeUsed||0)} used${sub.autoSubmit?' &nbsp;·&nbsp; <span style="color:var(--wa)">auto-submitted</span>':''}</div></div><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span class="badge ${sBadge(grade?.score)}">${sLabel(grade?.score)}</span>${isGraded?`<div style="font-family:var(--mono);font-size:26px;font-weight:700;letter-spacing:-1px;color:${sCol(grade.score)}">${grade.score}<span style="font-size:14px;opacity:.45">/100</span></div>`:''}</div></div><div class="rcard-body">${isGraded ? `<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:var(--td);margin-bottom:5px"><span>SCORE</span><span>${grade.score}/100</span></div><div class="sbar-wrap"><div class="sbar" style="width:${grade.score}%;background:${pctColor(grade.score)}"></div></div></div>${grade.feedback?`<div style="background:var(--s2);border-left:3px solid ${sCol(grade.score)};border-radius:0 var(--r) var(--r) 0;padding:12px 14px;margin-bottom:12px"><div style="font-family:var(--mono);font-size:9px;color:var(--td);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">📝 Instructor Feedback</div><div style="font-size:13px;color:var(--tm);line-height:1.8">${esc(grade.feedback)}</div></div>`:''}` : `<div class="note note-info" style="margin-bottom:12px">⏳ Your grade is not published yet. It will appear here automatically.</div>`}${sub.code ? `<button class="expand-btn" onclick="toggleCode('${expandId}', this)"><span>▶</span> Show My Code (${cLines.length} lines)</button><div id="${expandId}" style="display:none;margin-top:10px"><div class="cprev"><div class="cprev-bar"><span class="cdot" style="background:#f87171"></span><span class="cdot" style="background:#fbbf24"></span><span class="cdot" style="background:#4ade80"></span><span class="cprev-fname">my_solution.${langExt(test?.language)}</span></div><div class="cprev-body"><div class="cprev-lines">${cLines.map((_,i)=>i+1).join('<br>')}</div><pre class="cprev-code">${esc(sub.code)}</pre></div></div></div>` : sub.fileName ? `<div style="display:inline-flex;align-items:center;gap:7px;background:var(--s2);border:1px solid var(--b1);border-radius:6px;padding:6px 12px;font-family:var(--mono);font-size:11px;color:var(--ac)">📦 ${esc(sub.fileName)}</div>` : ''}</div></div>`; }).join('');
+el.innerHTML = summaryHtml + cardsHtml;
+}
+window.toggleCode = (expandId, btn) => { const el = document.getElementById(expandId); const open = el.style.display === 'block'; el.style.display = open ? 'none' : 'block'; btn.innerHTML = open ? '<span>▶</span> Show My Code' : '<span>▼</span> Hide Code'; const pre = el.querySelector('.cprev-code'); if (!open && pre) btn.innerHTML = `<span>▼</span> Hide Code (${pre.textContent.split('\n').length} lines)`; else if (open) { const lines = el.querySelector('.cprev-code')?.textContent?.split('\n')?.length || 0; btn.innerHTML = `<span>▶</span> Show My Code (${lines} lines)`; } };
+window.goResults = () => showLobby(true);
+
+window.startTest = testId => {
+const test = testsCache[testId];
+if (!test) { alert('Test not found.'); return; }
+if (!test.isOpen) { alert('This test has been closed.'); return; }
+const maxAllowed = test.maxSubmissions || 1;
+const cachedMySubs = Object.values(subsCache).filter(s => s.testId === testId && s.studentName === myName);
+if (cachedMySubs.length >= maxAllowed) { renderLobbyTests(testsCache); return; }
+get(ref(db, 'submissions')).then(snap => {
+const allSubs = snap.val() || {};
+const serverMySubs = Object.values(allSubs).filter(s => s.studentName === myName && s.testId === testId);
+if (serverMySubs.length >= maxAllowed) { subsCache = {}; Object.values(allSubs).forEach(s => { if (s.studentName === myName) subsCache[s.id] = s; }); renderLobbyTests(testsCache); return; }
+activeTest = test; totalTime = test.duration; selectedFile = null;
+const sessionKey = myName.replace(/[.#$[\]/]/g, '_') + '_' + testId;
+get(ref(db, 'activeSessions/' + sessionKey)).then(snap2 => {
+const session = snap2.val(); const now = Date.now();
+if (session && session.startedAt) {
+const elapsed = Math.floor((now - session.startedAt) / 1000);
+const remaining = test.duration - elapsed;
+if (remaining <= 0) { activeTest = test; timeLeft = 0; totalTime = test.duration; sessionStartedAt = session.startedAt; buildTestScreen(test); show('testing'); startPresence('Taking test: ' + (test.title || '')); window.doSubmit(true); return; }
+timeLeft = remaining; sessionStartedAt = session.startedAt;
+} else { timeLeft = test.duration; sessionStartedAt = now; set(ref(db, 'activeSessions/' + sessionKey), { studentName: myName, testId: testId, startedAt: now }); }
+buildTestScreen(test); show('testing'); startPresence('Taking test: ' + (test.title || '')); startTimer();
+});
+}).catch(err => { console.error('startTest server check failed:', err); alert('Could not verify submission count. Check your internet and try again.'); });
+};
+
+function buildTestScreen(test) {
+const submitBtn = document.getElementById('submit-btn');
+if (submitBtn) { submitBtn.classList.remove('btn-submitting', 'btn-done'); submitBtn.classList.add('btn-p'); submitBtn.innerHTML = '✓ Submit Answer'; submitBtn.disabled = false; }
+document.getElementById('test-name-chip').textContent = myName;
+document.getElementById('q-title-lbl').textContent = test.title;
+const descEl=document.getElementById('q-desc');
+if(test.description){descEl.textContent=test.description;descEl.style.display='block';} else descEl.style.display='none';
+document.getElementById('q-text').textContent=test.question;
+const langEl=document.getElementById('q-lang');
+langEl.innerHTML=test.language?`Language: <span style="color:var(--ac);font-weight:700">${test.language.toUpperCase()}</span>`:'';
+const area=document.getElementById('submission-area');
+if(test.submissionType==='editor'){
+document.getElementById('lines-stat').style.display='block';
+document.getElementById('submit-btn').disabled=false;
+area.innerHTML=`<div class="editor"><div class="ebar"><span class="edot" style="background:#f87171"></span><span class="edot" style="background:#fbbf24"></span><span class="edot" style="background:#4ade80"></span><span class="efname">solution.${langExt(test.language)}</span><span class="elang">${(test.language||'CODE').toUpperCase()}</span></div><div class="ebody"><div class="elines" id="ln">1</div><textarea class="ecode" id="editor-ta" placeholder="# Write your ${esc(test.language||'code')} solution here..." spellcheck="false" oninput="onCode()" onkeydown="onTab(event)"></textarea></div><div class="efooter" id="editor-meta">0 chars · 1 line</div></div>`;
+} else {
+document.getElementById('lines-stat').style.display='none';
+document.getElementById('submit-btn').disabled=true;
+area.innerHTML=`<div class="upload-zone" id="upload-zone" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="onDrop(event)"><input type="file" accept=".zip" onchange="onFileSelect(event)"/><div style="font-size:36px;opacity:.7">📦</div><div style="font-size:15px;font-weight:700">Drop your ZIP file here</div><div style="font-size:12px;color:var(--td)">or click to browse &nbsp;·&nbsp; .zip files only</div><div id="file-display"></div></div>`;
+}
+}
+window.onCode = () => { const ta=document.getElementById('editor-ta'); if(!ta)return; const lines=ta.value.split('\n'); document.getElementById('ln').innerHTML=lines.map((_,i)=>i+1).join('<br>'); document.getElementById('lines-val').textContent=lines.length; document.getElementById('editor-meta').textContent=`${ta.value.length} chars · ${lines.length} lines`; };
+window.onTab = e => { if(e.key!=='Tab')return; e.preventDefault(); const ta=e.target,s=ta.selectionStart,v=ta.value; ta.value=v.substring(0,s)+'  '+v.substring(ta.selectionEnd); ta.selectionStart=ta.selectionEnd=s+2; window.onCode(); };
+window.onFileSelect = e => setFile(e.target.files[0]);
+window.onDrop = e => { e.preventDefault(); document.getElementById('upload-zone')?.classList.remove('drag'); setFile(e.dataTransfer.files[0]); };
+function setFile(f) { if (!f) return; selectedFile = f; const sizeKB = (f.size / 1024).toFixed(1); document.getElementById('file-display').innerHTML = `<div style="display:inline-flex;align-items:center;gap:8px;background:var(--s1);border:1px solid var(--b1);border-radius:6px;padding:7px 14px;font-family:var(--mono);font-size:11px;color:var(--td)">⏳ Reading file...</div>`; document.getElementById('submit-btn').disabled = true; const reader = new FileReader(); reader.onload = (e) => { fileBase64 = e.target.result; document.getElementById('file-display').innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="display:inline-flex;align-items:center;gap:8px;background:var(--s1);border:1px solid var(--acd);border-radius:6px;padding:7px 14px;font-family:var(--mono);font-size:11px;color:var(--ac)">📦 ${esc(f.name)}</div><div style="font-family:var(--mono);font-size:10px;color:var(--td)">${sizeKB} KB --- ready to submit</div></div>`; document.getElementById('submit-btn').disabled = false; }; reader.onerror = () => { document.getElementById('file-display').innerHTML = `<div style="font-family:var(--mono);font-size:11px;color:var(--er)">⚠ Failed to read file. Try again.</div>`; }; reader.readAsDataURL(f); }
+function startTimer() { clearInterval(timerInt); if (!sessionStartedAt) sessionStartedAt = Date.now() - ((totalTime - timeLeft) * 1000); updateTimerUI(); timerInt = setInterval(() => { if (!activeTest || !sessionStartedAt) return; const elapsed = Math.floor((Date.now() - sessionStartedAt) / 1000); timeLeft = Math.max(0, activeTest.duration - elapsed); updateTimerUI(); if (timeLeft <= 0) { clearInterval(timerInt); window.doSubmit(true); } }, 1000); }
+function updateTimerUI() { const pct=totalTime>0?timeLeft/totalTime:0; const col=pct>.5?'var(--ac)':pct>.2?'var(--wa)':'var(--er)'; const d=document.getElementById('timer-display'),b=document.getElementById('timer-bar'); if(!d||!b)return; d.textContent=fmt(timeLeft); d.style.color=col; b.style.width=(pct*100)+'%'; b.style.background=col; }
+window.confirmExit = () => { if (confirm('Exit the test? The timer keeps running even if you leave!')) { clearInterval(timerInt); showLobby(); } };
+window.doSubmit = auto => { if (isSubmitting) return; isSubmitting = true; const btn = document.getElementById('submit-btn'); function setBtn(state) { if (!btn) return; btn.classList.remove('btn-p', 'btn-submitting', 'btn-done'); if (state === 'submitting') { btn.disabled = true; btn.classList.add('btn-submitting'); btn.innerHTML = `<span style="display:inline-block;width:13px;height:13px;border:2px solid rgba(7,8,11,.3);border-top-color:#07080b;border-radius:50%;animation:rot .7s linear infinite;flex-shrink:0"></span> Submitting...`; } else if (state === 'submitted') { btn.disabled = true; btn.classList.add('btn-done'); btn.innerHTML = '✅ Submitted!'; } else if (state === 'error') { btn.disabled = false; btn.classList.add('btn-p'); btn.innerHTML = '✓ Submit Answer'; } } setBtn('submitting'); clearInterval(timerInt); const code = document.getElementById('editor-ta')?.value || null; const elapsed = totalTime - timeLeft; const id = uid(); const sub = { id, studentName: myName, testId: activeTest.id, submittedAt: Date.now(), timeUsed: auto ? totalTime : Math.max(elapsed, 0), submissionType: activeTest.submissionType, code: activeTest.submissionType === 'editor' ? code : null, fileName: selectedFile?.name || null, fileData: activeTest.submissionType === 'upload' ? (fileBase64 || null) : null, fileSize: selectedFile ? Math.round(selectedFile.size / 1024) : null, autoSubmit: auto, grade: null }; if (activeTest) { const sk = myName.replace(/[.#$[\]/]/g, '_') + '_' + activeTest.id; remove(ref(db, 'activeSessions/' + sk)); } const savePromise = set(ref(db, `submissions/${id}`), sub); const timeout = new Promise(resolve => setTimeout(() => resolve('timeout'), 6000)); Promise.race([savePromise.then(() => 'saved'), timeout]).then(result => { setBtn('submitted'); subsCache[id] = sub; currentSubId = id; sessionStartedAt = null; startPresence('Browsing'); const myTestSubs = Object.values(subsCache).filter(s => s.testId === activeTest.id); const maxAllowed = activeTest.maxSubmissions || 1; const usedCount = myTestSubs.length; const remaining = maxAllowed - usedCount; setTimeout(() => { isSubmitting = false; if (remaining > 0) { goLobbyAfterSubmit(sub, usedCount, maxAllowed, remaining); } else { goLobbyNoMoreSubmits(sub, maxAllowed); } }, 1500); }).catch(err => { console.error('Submission error:', err); isSubmitting = false; setBtn('error'); alert('Submission failed. Please check your internet and try again.'); }); };
+function goLobbyAfterSubmit(sub, usedCount, maxAllowed, remaining) { activeTest = null; currentSubId = null; selectedFile = null; fileBase64 = null; sessionStartedAt = null; showLobby(); setTimeout(() => { const area = document.getElementById('comments-area'); const notice = document.createElement('div'); notice.style.cssText = 'background:var(--acg);border:1.5px solid var(--acd);border-radius:var(--rl);padding:14px 18px;margin-bottom:14px;animation:slideDown .4s cubic-bezier(.34,1.2,.64,1)'; notice.innerHTML = `<div style="font-family:var(--mono);font-size:9px;color:var(--ac);font-weight:700;letter-spacing:1.5px;margin-bottom:6px">✅ SUBMISSION RECEIVED</div><div style="font-size:13px;color:var(--tx);font-weight:600;margin-bottom:4px">Attempt ${usedCount} of ${maxAllowed} submitted successfully.</div><div style="font-size:12px;color:var(--tm)">You have <strong>${remaining}</strong> attempt${remaining!==1?'s':''} remaining on this test.</div>`; if (area) area.parentNode.insertBefore(notice, area); setTimeout(() => { if (notice.parentNode) notice.parentNode.removeChild(notice); }, 6000); }, 100); }
+function goLobbyNoMoreSubmits(sub, maxAllowed) { activeTest = null; currentSubId = null; selectedFile = null; fileBase64 = null; sessionStartedAt = null; showLobby(); setTimeout(() => { const area = document.getElementById('comments-area'); const notice = document.createElement('div'); notice.style.cssText = 'background:var(--s2);border:1.5px solid var(--b2);border-radius:var(--rl);padding:14px 18px;margin-bottom:14px;animation:slideDown .4s cubic-bezier(.34,1.2,.64,1)'; notice.innerHTML = `<div style="font-family:var(--mono);font-size:9px;color:var(--td);font-weight:700;letter-spacing:1.5px;margin-bottom:6px">✓ ALL SUBMISSIONS COMPLETE</div><div style="font-size:13px;color:var(--tx);font-weight:600;margin-bottom:4px">Your submission was received.</div><div style="font-size:12px;color:var(--er);font-weight:700">⛔ No more additional submissions allowed for this test.</div>`; if (area) area.parentNode.insertBefore(notice, area); setTimeout(() => { if (notice.parentNode) notice.parentNode.removeChild(notice); }, 8000); }, 100); }
+function showSubmittedScreen(sub, auto) { document.getElementById('sub-name-chip').textContent=myName; document.getElementById('sub-msg').textContent=auto?'Time expired --- automatically submitted.':'Your work has been recorded successfully.'; const lines=(sub.code||'').split('\n').length; document.getElementById('sub-stats').innerHTML=[['Test',esc(testsCache[sub.testId]?.title||activeTest?.title||''),'var(--bl)'],['Time Used',fmt(sub.timeUsed||0),'var(--ac)'],...(sub.submissionType==='editor'?[['Lines Written',lines,'var(--wa)']]: [])].map(([l,v,c])=>`<div style="text-align:center"><div style="font-family:var(--mono);font-size:9px;color:var(--td);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px">${l}</div><div style="font-family:var(--mono);font-size:14px;font-weight:700;color:${c}">${v}</div></div>`).join(''); renderGradeArea(sub.grade); show('submitted'); if(gradeUnsub) gradeUnsub(); gradeUnsub = onValue(ref(db,`submissions/${currentSubId}/grade`), snap => { const grade=snap.val(); if(grade){ renderGradeArea(grade); subsCache[currentSubId]={...subsCache[currentSubId],grade}; } }); }
+function renderGradeArea(grade) { const el=document.getElementById('grade-area'); if(!grade){ el.innerHTML=`<div class="note note-info" style="justify-content:center">⏳ Grade will appear here instantly once your instructor publishes it.</div>`; return; } el.innerHTML=`<div style="background:var(--s2);border:1px solid var(--b2);border-radius:var(--rl);padding:20px 24px;text-align:left" class="fade"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><span style="font-family:var(--mono);font-size:9px;color:var(--td);text-transform:uppercase;letter-spacing:1.2px">Your Grade</span><span class="badge ${sBadge(grade.score)}">${sLabel(grade.score)}</span></div><div style="font-family:var(--mono);font-size:44px;font-weight:700;letter-spacing:-2px;color:${sCol(grade.score)};margin-bottom:12px">${grade.score}<span style="font-size:22px;opacity:.45">/100</span></div><div class="sbar-wrap" style="margin-bottom:${grade.feedback?'14px':'0'}"><div class="sbar" style="width:${grade.score}%;background:${pctColor(grade.score)}"></div></div>${grade.feedback?`<div style="font-size:13px;color:var(--tm);line-height:1.8;border-top:1px solid var(--b1);padding-top:12px"><div style="font-family:var(--mono);font-size:9px;color:var(--td);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">📝 Instructor Feedback</div>${esc(grade.feedback)}</div>`:''}</div>`; }
+function renderPolls(polls) { if (polls !== undefined) pollsCache = polls; const el = document.getElementById('polls-area'); if (!el) return; const activePolls = Object.values(pollsCache).filter(p => p.active).sort((a,b) => b.sentAt - a.sentAt); if (activePolls.length === 0) { el.innerHTML = ''; return; } el.innerHTML = activePolls.map(p => { const myResp = myPollResponses[p.id]; const answered = !!myResp; return `<div class="poll-banner"><div class="poll-banner-label">🗳️ POLL FROM INSTRUCTOR</div><div class="poll-banner-q">${esc(p.question)}</div>${answered ? `<div style="display:flex;gap:10px;flex-wrap:wrap"><div class="poll-btn-yes ${myResp.answer==='yes'?'selected':''}" style="cursor:default;opacity:${myResp.answer==='yes'?'1':'0.4'}">✅ YES</div><div class="poll-btn-no ${myResp.answer==='no'?'selected':''}" style="cursor:default;opacity:${myResp.answer==='no'?'1':'0.4'}">❌ NO</div></div><div class="poll-answered">You answered <strong style="color:${myResp.answer==='yes'?'var(--ac)':'var(--er)'}">${myResp.answer.toUpperCase()}</strong> &nbsp;·&nbsp; <button class="poll-change-btn" onclick="changePollAnswer('${p.id}')">Change answer</button></div>` : `<div class="poll-btn-row"><button class="poll-btn-yes" onclick="answerPoll('${p.id}','yes')">✅ YES</button><button class="poll-btn-no" onclick="answerPoll('${p.id}','no')">❌ NO</button></div>`}</div>`; }).join(''); }
+window.answerPoll = (pollId, answer) => { const respId = (myName.replace(/[.#$[\]/]/g,'_')) + '_' + pollId; const resp = { id: respId, pollId, studentName: myName, answer, answeredAt: Date.now() }; set(ref(db, `pollResponses/${respId}`), resp); myPollResponses[pollId] = resp; renderPolls(); };
+window.changePollAnswer = pollId => { const respId = (myName.replace(/[.#$[\]/]/g,'_')) + '_' + pollId; delete myPollResponses[pollId]; remove(ref(db, `pollResponses/${respId}`)); renderPolls(); };
+function renderComments(all) { const el = document.getElementById('comments-area'); if (!el) return; const cmts = Object.values(all).filter(c => c.to === '__all__' || c.to === myName).sort((a, b) => b.sentAt - a.sentAt); if (cmts.length === 0) { el.innerHTML = ''; return; } el.innerHTML = cmts.map(c => { const isBroadcast = c.to === '__all__'; const isReply = c.id && c.id.startsWith('reply_'); const labelText = isBroadcast ? '📢 ANNOUNCEMENT FROM INSTRUCTOR' : isReply ? '↩ REPLY FROM INSTRUCTOR' : '✉️ MESSAGE FOR YOU FROM INSTRUCTOR'; return `<div class="cmt-banner ${isBroadcast ? 'broadcast' : 'private'}"><div class="cmt-banner-label ${isBroadcast ? 'broadcast' : 'private'}">${labelText}</div><div class="cmt-banner-msg">${esc(c.message)}</div><div class="cmt-banner-time">${new Date(c.sentAt).toLocaleString()}</div></div>`; }).join(''); }
+window.retakeTest = testId => { isSubmitting = false; const sessionKey = myName.replace(/[.#$[\]/]/g,'_') + '_' + testId; remove(ref(db, 'activeSessions/' + sessionKey)); sessionStartedAt = null; activeTest = null; currentSubId = null; selectedFile = null; fileBase64 = null; window.startTest(testId); };
+window.goLobby = () => { isSubmitting=false; clearInterval(timerInt); if(gradeUnsub){gradeUnsub();gradeUnsub=null;} activeTest=null; currentSubId=null; selectedFile=null; fileBase64=null; sessionStartedAt=null; startPresence('Browsing'); showLobby(); };
+
+// Student Messaging System
+const MSG_DAILY_LIMIT = 3;
+function todayKey() { return new Date().toISOString().slice(0, 10); }
+function msgStorageKey(name) { return `msgCount_${name.replace(/\s+/g,'_')}_${todayKey()}`; }
+function getMsgCount() { if (!myName) return 0; return parseInt(localStorage.getItem(msgStorageKey(myName)) || '0', 10); }
+function incrementMsgCount() { const key = msgStorageKey(myName); const current = parseInt(localStorage.getItem(key) || '0', 10); localStorage.setItem(key, String(current + 1)); }
+function updateMsgQuotaUI() { const count = getMsgCount(); const remaining = Math.max(0, MSG_DAILY_LIMIT - count); const pct = (count / MSG_DAILY_LIMIT) * 100; const quotaEl = document.getElementById('msg-quota'); const fillEl = document.getElementById('msg-limit-fill'); const warnEl = document.getElementById('msg-warn'); const sendBtn = document.getElementById('msg-send-btn'); if (!quotaEl) return; if (remaining === 0) { quotaEl.textContent = '0 messages left today'; quotaEl.className = 'msg-quota full'; fillEl.style.width = '100%'; fillEl.style.background = 'var(--er)'; warnEl.style.display = 'flex'; sendBtn.disabled = true; sendBtn.textContent = 'Limit Reached'; } else if (remaining === 1) { quotaEl.textContent = `1 message left today`; quotaEl.className = 'msg-quota warn'; fillEl.style.width = pct + '%'; fillEl.style.background = 'var(--wa)'; warnEl.style.display = 'none'; onMsgInput(); } else { quotaEl.textContent = `${remaining} messages left today`; quotaEl.className = 'msg-quota'; fillEl.style.width = pct + '%'; fillEl.style.background = 'var(--ac)'; warnEl.style.display = 'none'; onMsgInput(); } }
+window.onMsgInput = () => { const count = getMsgCount(); const sendBtn = document.getElementById('msg-send-btn'); const txt = (document.getElementById('msg-text')?.value || '').trim(); if (!sendBtn) return; sendBtn.disabled = count >= MSG_DAILY_LIMIT || txt.length === 0; };
+function loadSentMessages() { if (!myName) return; onValue(ref(db, 'studentMessages'), snap => { const all = snap.val() || {}; const today = todayKey(); const mine = Object.values(all).filter(m => m.studentName === myName && m.dateKey === today).sort((a, b) => a.sentAt - b.sentAt); const histEl = document.getElementById('msg-history'); if (!histEl) return; if (mine.length === 0) { histEl.style.display = 'none'; histEl.innerHTML = ''; } else { histEl.style.display = 'flex'; histEl.innerHTML = mine.map(m => `<div class="msg-bubble"><div>${esc(m.message)}</div>${m.adminReply && m.adminReply.text ? `<div style="margin-top:8px;padding:8px 10px;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.25);border-radius:var(--r)"><div style="font-family:var(--mono);font-size:8px;color:var(--pu);font-weight:700;letter-spacing:1px;margin-bottom:4px">INSTRUCTOR REPLIED</div><div style="font-size:11px;color:var(--tm)">${esc(m.adminReply.text)}</div></div>` : ''}<div class="msg-bubble-time">${new Date(m.sentAt).toLocaleTimeString()}</div></div>`).join(''); histEl.scrollTop = histEl.scrollHeight; } const localKey = msgStorageKey(myName); const fbCount = mine.length; const localCount = parseInt(localStorage.getItem(localKey) || '0', 10); if (fbCount > localCount) localStorage.setItem(localKey, String(fbCount)); updateMsgQuotaUI(); }); }
+window.sendStudentMessage = () => { const txt = (document.getElementById('msg-text')?.value || '').trim(); if (!txt || !myName) return; const count = getMsgCount(); if (count >= MSG_DAILY_LIMIT) { updateMsgQuotaUI(); return; } incrementMsgCount(); updateMsgQuotaUI(); const sendBtn = document.getElementById('msg-send-btn'); sendBtn.disabled = true; sendBtn.innerHTML = `<span style="display:inline-block;width:11px;height:11px;border:2px solid rgba(7,8,11,.3);border-top-color:#07080b;border-radius:50%;animation:rot .7s linear infinite"></span>`; const id = uid(); const msg = { id, studentName: myName, message: txt, sentAt: Date.now(), dateKey: todayKey(), read: false }; set(ref(db, `studentMessages/${id}`), msg).then(() => { document.getElementById('msg-text').value = ''; sendBtn.innerHTML = 'Send'; onMsgInput(); }).catch(() => { const key = msgStorageKey(myName); const cur = parseInt(localStorage.getItem(key) || '1', 10); localStorage.setItem(key, String(Math.max(0, cur - 1))); updateMsgQuotaUI(); sendBtn.disabled = false; sendBtn.innerHTML = 'Send'; alert('Failed to send. Check your connection and try again.'); }); };
+function initMessaging() { updateMsgQuotaUI(); loadSentMessages(); }
+</script>
+</body>
+</html>
